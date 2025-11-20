@@ -37,7 +37,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   try {
     // 改为串行获取，避免 Notion Client 在 Next.js 环境下的并发 fetch 问题
     articles = await getDatabase()
-    categories = (await getCategories()) || []
+
+    // 从文章列表中提取分类，避免额外的 API 调用和潜在的 fetch 错误
+    const categorySet = new Set<string>()
+    articles.forEach((article: any) => {
+      if (article.category) {
+        categorySet.add(article.category)
+      }
+    })
+    categories = Array.from(categorySet).map(name => ({ name, color: 'default' }))
+
     isConnected = articles.length > 0 && articles[0].id !== "1" // First fallback article has id "1"
     console.log("[v0] Successfully fetched", articles.length, "articles and", categories.length, "categories")
   } catch (error) {
@@ -54,7 +63,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   // 分类筛选逻辑
   let filteredArticles = articles
   if (currentCategory) {
-    filteredArticles = filteredArticles.filter(article => article.category === currentCategory)
+    filteredArticles = filteredArticles.filter((article: any) => article.category === currentCategory)
   }
 
   // 分页逻辑
@@ -112,7 +121,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
         <div className={`grid gap-6 ${siteConfig.pages.home.grid.columns}`}>
           {currentArticles.length > 0 ? (
-            currentArticles.map((article) => (
+            currentArticles.map((article: any) => (
               <Link key={article.id} href={generateArticleUrl(article.title, article.id)}>
                 <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                   <div className="relative overflow-hidden">
