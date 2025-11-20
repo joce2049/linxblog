@@ -35,6 +35,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   let isConnected = false
 
   try {
+    // 改为串行获取，避免 Notion Client 在 Next.js 环境下的并发 fetch 问题
     articles = await getDatabase()
     categories = (await getCategories()) || []
     isConnected = articles.length > 0 && articles[0].id !== "1" // First fallback article has id "1"
@@ -196,7 +197,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 <div className="text-xs text-gray-500">基于Notion构建</div>
               </div>
             </div>
-            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
               基于 Notion 数据库的知识分享平台，专注于优质内容收集与传播
             </p>
 
