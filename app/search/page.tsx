@@ -11,7 +11,7 @@ import { Eye, Heart, MessageCircle, Calendar, Search, Filter, X } from "lucide-r
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import { generateArticleUrl } from "@/lib/utils"
 import Link from "next/link"
-import Image from "next/image"
+import UnifiedImage from "@/components/UnifiedImage"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
@@ -398,31 +398,15 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                   <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
                     <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                       <div className="relative overflow-hidden">
-                        {article.image ? (
-                          <Image
+                        {article.image && (
+                          <UnifiedImage
                             src={article.image}
                             alt={article.title}
-                            width={800}
-                            height={450}
                             className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                            quality={75}
                           />
-                        ) : (
-                          <div className="w-full aspect-video bg-gray-200 flex items-center justify-center text-gray-400">
-                            无封面
-                          </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                        {/* Category Badge */}
-                        <div className="absolute top-3 left-3">
-                          <Badge variant="secondary" className="bg-white/90 text-gray-800">
-                            {article.category}
-                          </Badge>
-                        </div>
                       </div>
-
                       <CardContent className="p-0">
                         <div className="p-5">
                           <h3
@@ -438,7 +422,6 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                             }}
                           />
 
-                          {/* Tags - 显示所有标签 */}
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {article.tags.map((t) => (
                               <Badge
@@ -451,21 +434,12 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                             ))}
                           </div>
 
-                          {/* Stats - 使用真实的Supabase数据 */}
                           <ArticleStatsDisplay
                             articleId={article.id}
                             initialViews={0}
                             initialLikes={0}
                             comments={article.comments}
                           />
-
-                          {/* Date */}
-                          <div className="mt-4 pt-4 border-t border-gray-100">
-                            <div className="flex items-center justify-center text-xs text-gray-500">
-                              <Calendar className="w-3 h-3 mr-1" />
-                              <span>{new Date(article.date).toLocaleDateString('zh-CN')}</span>
-                            </div>
-                          </div>
                         </div>
                       </CardContent>
                     </Card>
