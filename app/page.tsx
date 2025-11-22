@@ -12,6 +12,7 @@ import { generateArticleUrl } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import ArticleStatsDisplay from "@/components/ArticleStatsDisplay"
 
 // 强制动态渲染，确保每次请求都获取最新的 Notion 图片 URL
 export const dynamic = 'force-dynamic'
@@ -155,22 +156,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                         ))}
                       </div>
 
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center space-x-1 hover:text-blue-600 transition-colors">
-                            <Eye className="w-4 h-4" />
-                            <span>{article.views}</span>
-                          </div>
-                          <div className="flex items-center space-x-1 hover:text-red-500 transition-colors">
-                            <Heart className="w-4 h-4" />
-                            <span>{article.likes}</span>
-                          </div>
-                          <div className="flex items-center space-x-1 hover:text-green-600 transition-colors">
-                            <MessageCircle className="w-4 h-4" />
-                            <span>{article.comments}</span>
-                          </div>
-                        </div>
-                      </div>
+                      <ArticleStatsDisplay
+                        articleId={article.id}
+                        initialViews={0}
+                        initialLikes={0}
+                        comments={article.comments}
+                      />
                     </div>
                   </CardContent>
                 </Card>
