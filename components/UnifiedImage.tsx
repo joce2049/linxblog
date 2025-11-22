@@ -14,7 +14,7 @@ export default function UnifiedImage({
     src,
     alt,
     className,
-    fallbackSrc = '/placeholder-image.svg',
+    fallbackSrc = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="450"%3E%3Crect width="800" height="450" fill="%23e5e7eb"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="%239ca3af"%3E图片加载中...%3C/text%3E%3C/svg%3E',
     ...props
 }: UnifiedImageProps) {
     const [imgSrc, setImgSrc] = useState<string>(src)
@@ -40,34 +40,18 @@ export default function UnifiedImage({
     }
 
     return (
-        <div className={cn("relative overflow-hidden bg-gray-100", className)}>
-            {/* 加载动画 */}
-            {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
-                    <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
-                </div>
+        <img
+            src={imgSrc}
+            alt={alt}
+            className={cn(
+                className,
+                isLoading && !hasError ? "opacity-0" : "opacity-100",
+                "transition-opacity duration-300"
             )}
-
-            {/* 图片 */}
-            <img
-                src={imgSrc}
-                alt={alt}
-                className={cn(
-                    "w-full h-full object-cover transition-opacity duration-300",
-                    isLoading ? "opacity-0" : "opacity-100"
-                )}
-                referrerPolicy="no-referrer"
-                onError={handleError}
-                onLoad={handleLoad}
-                {...props}
-            />
-
-            {/* 错误提示 (可选，仅当 fallback 也失败或需要显式提示时) */}
-            {hasError && imgSrc === fallbackSrc && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
-                    <span className="text-xs">无法加载</span>
-                </div>
-            )}
-        </div>
+            referrerPolicy="no-referrer"
+            onError={handleError}
+            onLoad={handleLoad}
+            {...props}
+        />
     )
 }
