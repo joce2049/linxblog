@@ -12,6 +12,8 @@ import DynamicSEO from "@/components/DynamicSEO"
 import StructuredData from "@/components/StructuredData"
 import { generateArticleUrl } from "@/lib/utils"
 import ArticleLikeActions from "@/components/ArticleLikeActions"
+import ArticleHeaderStats from "@/components/ArticleHeaderStats"
+import ArticleStatsDisplay from "@/components/ArticleStatsDisplay"
 
 // 强制动态渲染，确保每次请求都获取最新的 Notion 图片 URL
 export const dynamic = 'force-dynamic'
@@ -185,18 +187,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         day: 'numeric'
                       })}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Eye className="w-4 h-4" />
-                      {article.views} 阅读
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Heart className="w-4 h-4" />
-                      {article.likes} 点赞
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="w-4 h-4" />
-                      {article.comments} 评论
-                    </div>
+                    <ArticleHeaderStats
+                      articleId={article.id}
+                      comments={article.comments}
+                      className="contents"
+                    />
                   </div>
                 </div>
               </div>
@@ -231,14 +226,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     <Calendar className="w-4 h-4" />
                     {new Date(article.date).toLocaleDateString('zh-CN')}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Eye className="w-4 h-4" />
-                    {article.views} 阅读
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Heart className="w-4 h-4" />
-                    {article.likes} 点赞
-                  </div>
+                  <ArticleHeaderStats
+                    articleId={article.id}
+                    comments={article.comments}
+                    className="contents"
+                  />
                 </div>
               </div>
             </div>
@@ -371,10 +363,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                           {relatedArticle.description}
                         </p>
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <Eye className="w-3 h-3" />
-                            {relatedArticle.views}
-                          </div>
+                          <ArticleStatsDisplay
+                            articleId={relatedArticle.id}
+                            initialViews={0}
+                            initialLikes={0}
+                            comments={0}
+                          />
                           <Badge variant="secondary" className="text-xs">
                             {relatedArticle.category}
                           </Badge>
