@@ -11,6 +11,7 @@ import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import DynamicSEO from "@/components/DynamicSEO"
 import StructuredData from "@/components/StructuredData"
 import { generateArticleUrl } from "@/lib/utils"
+import ArticleLikeActions from "@/components/ArticleLikeActions"
 
 // 强制动态渲染，确保每次请求都获取最新的 Notion 图片 URL
 export const dynamic = 'force-dynamic'
@@ -314,6 +315,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 [&_h2]:scroll-mt-20
                 [&_h3]:scroll-mt-20
                 [&_a]:transition-colors
+                [&_a]:break-words
+                [&_a]:overflow-wrap-anywhere
                 [&_img]:max-w-full
                 [&_img]:h-auto
                 [&_pre]:font-mono
@@ -335,23 +338,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
             {/* 文章底部操作栏 */}
             <div className="mt-12 pt-8 border-t border-gray-200">
-              <div className="flex gap-4">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Heart className="h-4 w-4" />
-                  点赞 ({article.likes})
-                </Button>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <MessageCircle className="h-4 w-4" />
-                  评论 ({article.comments})
-                </Button>
-              </div>
+              <ArticleLikeActions articleId={article.id} initialComments={article.comments} />
             </div>
           </article>
 
           {/* 相关推荐 */}
           {relatedArticles.length > 0 && (
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">相关推荐</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">相关推荐</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {relatedArticles.map((relatedArticle) => (
                   <Link
