@@ -11,8 +11,23 @@ import ArticleCardSkeleton from "@/components/ArticleCardSkeleton"
 import { generateArticleUrl } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import Link from "next/link"
-import UnifiedImage from "@/components/UnifiedImage"
-import ArticleStatsDisplay from "@/components/ArticleStatsDisplay"
+import Image from "next/image"
+import nextDynamic from 'next/dynamic'
+
+// 动态导入非关键组件，减少首屏加载时间
+const ArticleStatsDisplay = nextDynamic(
+  () => import('@/components/ArticleStatsDisplay'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center gap-4 text-sm text-gray-500">
+        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
+        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
+        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
+      </div>
+    )
+  }
+)
 
 // 强制动态渲染，确保每次请求都获取最新的 Notion 图片 URL
 export const dynamic = 'force-dynamic'
@@ -123,14 +138,18 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className={`grid gap-6 ${siteConfig.pages.home.grid.columns}`}>
           {currentArticles.length > 0 ? (
             currentArticles.map((article: any) => (
-              <Link key={article.id} href={generateArticleUrl(article.title, article.id)}>
+              <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
                 <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                   <div className="relative overflow-hidden">
                     {article.image && (
-                      <UnifiedImage
+                      <Image
                         src={article.image}
                         alt={article.title}
+                        width={800}
+                        height={450}
                         className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        quality={75}
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

@@ -6,14 +6,17 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, Eye, Heart, MessageCircle } from "lucide-react"
 import Link from "next/link"
-import UnifiedImage from "@/components/UnifiedImage"
+import Image from "next/image"
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import DynamicSEO from "@/components/DynamicSEO"
 import StructuredData from "@/components/StructuredData"
 import { generateArticleUrl } from "@/lib/utils"
-import ArticleLikeActions from "@/components/ArticleLikeActions"
-import ArticleHeaderStats from "@/components/ArticleHeaderStats"
-import ArticleStatsDisplay from "@/components/ArticleStatsDisplay"
+import nextDynamic from 'next/dynamic'
+
+// 动态导入非关键组件
+const ArticleLikeActions = nextDynamic(() => import('@/components/ArticleLikeActions'), { ssr: false })
+const ArticleHeaderStats = nextDynamic(() => import('@/components/ArticleHeaderStats'), { ssr: false })
+const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
 
 // 强制动态渲染，确保每次请求都获取最新的 Notion 图片 URL
 export const dynamic = 'force-dynamic'
@@ -150,11 +153,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="relative w-full h-[60vh] min-h-[400px] max-h-[600px] overflow-hidden">
             {/* 高斯模糊背景层 */}
             <div className="absolute inset-0">
-              <UnifiedImage
+              <Image
                 src={article.image}
                 alt=""
+                width={1200}
+                height={600}
                 className="w-full h-full object-cover"
                 style={{ filter: 'blur(10px)' }}
+                priority
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
             </div>
@@ -343,14 +349,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   <Link
                     key={relatedArticle.id}
                     href={generateArticleUrl(relatedArticle.title, relatedArticle.id)}
+                    prefetch={true}
                   >
                     <Card className="bg-white hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl h-full">
                       {relatedArticle.image && (
                         <div className="relative overflow-hidden aspect-video">
-                          <UnifiedImage
+                          <Image
                             src={relatedArticle.image}
                             alt={relatedArticle.title}
+                            width={400}
+                            height={225}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                            quality={75}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
