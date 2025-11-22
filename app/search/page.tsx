@@ -11,7 +11,10 @@ import { Eye, Heart, MessageCircle, Calendar, Search, Filter, X } from "lucide-r
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import { generateArticleUrl } from "@/lib/utils"
 import Link from "next/link"
-import UnifiedImage from "@/components/UnifiedImage"
+import Image from "next/image"
+import nextDynamic from 'next/dynamic'
+
+const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
 
 interface Article {
   id: string
@@ -392,14 +395,18 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                 {filteredArticles.map((article) => (
-                  <Link key={article.id} href={generateArticleUrl(article.title, article.id)}>
+                  <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
                     <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                       <div className="relative overflow-hidden">
                         {article.image ? (
-                          <UnifiedImage
+                          <Image
                             src={article.image}
                             alt={article.title}
+                            width={800}
+                            height={450}
                             className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                            quality={75}
                           />
                         ) : (
                           <div className="w-full aspect-video bg-gray-200 flex items-center justify-center text-gray-400">
@@ -444,21 +451,13 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                             ))}
                           </div>
 
-                          {/* Stats - 居中显示，去除下载按钮 */}
-                          <div className="flex items-center justify-center space-x-6 text-sm text-gray-500">
-                            <div className="flex items-center space-x-1 hover:text-blue-600 transition-colors">
-                              <Eye className="w-4 h-4" />
-                              <span>{article.views}</span>
-                            </div>
-                            <div className="flex items-center space-x-1 hover:text-red-500 transition-colors">
-                              <Heart className="w-4 h-4" />
-                              <span>{article.likes}</span>
-                            </div>
-                            <div className="flex items-center space-x-1 hover:text-green-600 transition-colors">
-                              <MessageCircle className="w-4 h-4" />
-                              <span>{article.comments}</span>
-                            </div>
-                          </div>
+                          {/* Stats - 使用真实的Supabase数据 */}
+                          <ArticleStatsDisplay
+                            articleId={article.id}
+                            initialViews={0}
+                            initialLikes={0}
+                            comments={article.comments}
+                          />
 
                           {/* Date */}
                           <div className="mt-4 pt-4 border-t border-gray-100">

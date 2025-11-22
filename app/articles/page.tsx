@@ -15,7 +15,10 @@ import ArticleCardSkeleton from "@/components/ArticleCardSkeleton"
 import { generateArticleUrl } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import Link from "next/link"
-import UnifiedImage from "@/components/UnifiedImage"
+import Image from "next/image"
+import nextDynamic from 'next/dynamic'
+
+const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
 
 // 强制动态渲染
 export const dynamic = 'force-dynamic'
@@ -109,14 +112,18 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
           <div className={`grid gap-6 ${siteConfig.pages.articles.grid.columns}`}>
             {currentArticles.length > 0 ? (
               currentArticles.map((article) => (
-                <Link key={article.id} href={generateArticleUrl(article.title, article.id)}>
+                <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
                   <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                     <div className="relative overflow-hidden">
                       {article.image && (
-                        <UnifiedImage
+                        <Image
                           src={article.image}
                           alt={article.title}
+                          width={800}
+                          height={450}
                           className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                          quality={75}
                         />
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -142,22 +149,12 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                           ))}
                         </div>
 
-                        <div className="flex items-center justify-between text-sm text-gray-500">
-                          <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-1 hover:text-blue-600 transition-colors">
-                              <Eye className="w-4 h-4" />
-                              <span>{article.views}</span>
-                            </div>
-                            <div className="flex items-center space-x-1 hover:text-red-500 transition-colors">
-                              <Heart className="w-4 h-4" />
-                              <span>{article.likes}</span>
-                            </div>
-                            <div className="flex items-center space-x-1 hover:text-green-600 transition-colors">
-                              <MessageCircle className="w-4 h-4" />
-                              <span>{article.comments}</span>
-                            </div>
-                          </div>
-                        </div>
+                        <ArticleStatsDisplay
+                          articleId={article.id}
+                          initialViews={0}
+                          initialLikes={0}
+                          comments={article.comments}
+                        />
                       </div>
                     </CardContent>
                   </Card>
