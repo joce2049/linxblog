@@ -79,18 +79,18 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <div className="mb-6">
               <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-white/30 text-sm text-blue-600 mb-4">
                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                实时同步Notion数据
+                博主正在后台更新中...
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
               LinX 后期工坊
               <br />
-              <span className="text-2xl md:text-3xl font-normal text-gray-600">记录学习与成长</span>
+              <span className="text-2xl md:text-3xl font-normal text-gray-600">资源分享与技术交流</span>
             </h1>
-            <p className="text-lg md:text-xl mb-8 text-gray-600 max-w-2xl mx-auto">
-              基于 Notion 数据库构建的知识分享平台
+            <p className="text-lg md:text-lg mb-8 text-gray-600 max-w-2xl mx-auto">
+              声明：分享资源仅供用户交流学习与研究使用，版权归属原版权方所有
               <br />
-              专注于优质资源收集与知识传播
+              若无意中侵犯到您的版权利益，请联系我，第一时间给予处理！
             </p>
           </div>
         </div>
@@ -211,9 +211,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             </div>
 
             <div className="flex justify-center space-x-6 text-sm text-gray-500 mb-6">
-              <a href="#" className="hover:text-blue-600 transition-colors">
+              <Link href="/about" className="hover:text-blue-600 transition-colors">
                 关于本站
-              </a>
+              </Link>
               <a href="#" className="hover:text-blue-600 transition-colors">
                 友情链接
               </a>

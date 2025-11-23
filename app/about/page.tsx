@@ -88,70 +88,56 @@ export default async function AboutPage() {
             </Card>
           </div>
 
-          {/* Project Info */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl">
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <Globe className="w-6 h-6 mr-2 text-blue-600" />
-                  项目特色
-                </h2>
-                <ul className="space-y-3 text-gray-700">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>基于 Notion API 的动态数据获取</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>响应式设计，支持多设备访问</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>现代化 UI 设计，采用 Heo 主题风格</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>智能搜索和分类系统</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>高性能架构，基于 Next.js 14</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl">
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
-                  <Code className="w-6 h-6 mr-2 text-green-600" />
-                  技术栈
-                </h2>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-700">前端框架</span>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">Next.js 14</Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-700">UI 组件</span>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">Radix UI</Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-700">样式框架</span>
-                    <Badge variant="secondary" className="bg-purple-100 text-purple-800">Tailwind CSS</Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-700">数据源</span>
-                    <Badge variant="secondary" className="bg-orange-100 text-orange-800">Notion API</Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-700">开发语言</span>
-                    <Badge variant="secondary" className="bg-red-100 text-red-800">TypeScript</Badge>
-                  </div>
+          {/* Announcement */}
+          <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl mb-12">
+            <CardContent className="p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center flex items-center justify-center">
+                <Globe className="w-6 h-6 mr-2 text-blue-600" />
+                公告
+              </h2>
+              <div className="text-center space-y-4 text-gray-700 leading-relaxed">
+                <p className="text-base">
+                  所有分享仅供学习使用，请勿用于商业。
+                </p>
+                <p className="text-base">
+                  教程、资源、影视素材持续更新，欢迎关注获取最新内容！
+                </p>
+                <p className="text-base pt-2">
+                  网站域名可能会失效，我们的社交平台同步更新：
+                </p>
+                <p className="text-base font-medium">
+                  公众号 / 小红书：
+                  <a
+                    href="https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                  >
+                    LinX后期工坊
+                  </a>
+                  <span className="mx-3">•</span>
+                  B站：
+                  <a
+                    href="https://space.bilibili.com/173981850"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                  >
+                    野生技术协会会长
+                  </a>
+                </p>
+                <div className="pt-4 pb-2">
+                  <p className="text-base font-semibold text-orange-600 flex items-center justify-center">
+                    <span className="mr-2">⚠️</span>
+                    下载前请务必先转存，避免资源失效！
+                  </p>
+                  <p className="text-sm text-gray-600 mt-2">
+                    （如需解压）密码：<span className="font-mono bg-gray-100 px-2 py-1 rounded">bzysjsxhhz</span>
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Features */}
           <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl mb-12">
