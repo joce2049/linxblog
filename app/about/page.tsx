@@ -2,14 +2,14 @@ import { getDatabase, getCategories } from "@/lib/notion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { 
-  Github, 
-  Twitter, 
-  Mail, 
-  Globe, 
-  Code, 
-  Database, 
-  Zap, 
+import {
+  Github,
+  Twitter,
+  Mail,
+  Globe,
+  Code,
+  Database,
+  Zap,
   Shield,
   Users,
   FileText,
@@ -19,6 +19,10 @@ import {
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import Link from "next/link"
 
+// 强制动态渲染
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function AboutPage() {
   const articles = await getDatabase()
   const categories = await getCategories()
@@ -26,14 +30,14 @@ export default async function AboutPage() {
   const stats = {
     totalArticles: articles.length,
     totalCategories: categories.length,
-    totalTags: new Set(articles.flatMap(article => article.tags)).size,
-    latestUpdate: new Date(Math.max(...articles.map(article => new Date(article.date).getTime()))).toLocaleDateString('zh-CN')
+    totalTags: new Set(articles.flatMap((article: any) => article.tags)).size,
+    latestUpdate: new Date(Math.max(...articles.map((article: any) => new Date(article.date).getTime()))).toLocaleDateString('zh-CN')
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <ConfigurableNavigation categories={categories} />
-      
+
       <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Page Header */}
@@ -43,7 +47,9 @@ export default async function AboutPage() {
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">关于 LinX 后期工坊</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              基于 Notion 数据库构建的现代化知识分享平台，专注于优质内容收集与传播
+              基于 Notion 数据库构建的现代化知识分享平台
+              <br />
+              专注于优质内容收集与传播
             </p>
           </div>
 
@@ -56,7 +62,7 @@ export default async function AboutPage() {
                 <div className="text-sm text-gray-600">总资源数</div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
               <CardContent className="p-6">
                 <Database className="w-8 h-8 text-green-600 mx-auto mb-3" />
@@ -64,7 +70,7 @@ export default async function AboutPage() {
                 <div className="text-sm text-gray-600">分类数量</div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
               <CardContent className="p-6">
                 <Code className="w-8 h-8 text-purple-600 mx-auto mb-3" />
@@ -72,7 +78,7 @@ export default async function AboutPage() {
                 <div className="text-sm text-gray-600">标签数量</div>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
               <CardContent className="p-6">
                 <Zap className="w-8 h-8 text-orange-600 mx-auto mb-3" />
@@ -159,7 +165,7 @@ export default async function AboutPage() {
                   <h3 className="font-semibold text-gray-900 mb-2">智能搜索</h3>
                   <p className="text-sm text-gray-600">快速定位所需资源，支持关键词和标签搜索</p>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="w-8 h-8 text-green-600" />
@@ -167,7 +173,7 @@ export default async function AboutPage() {
                   <h3 className="font-semibold text-gray-900 mb-2">分类管理</h3>
                   <p className="text-sm text-gray-600">专业的分类系统，便于资源整理和发现</p>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Shield className="w-8 h-8 text-purple-600" />

@@ -33,33 +33,50 @@ interface ArticlesPageProps {
   }
 }
 
+interface Article {
+  id: string
+  title: string
+  description: string
+  content: string
+  format: string[]
+  category: string
+  tags: string[]
+  image: string | null
+  views: number
+  likes: number
+  comments: number
+  date: string
+  url: string
+  status: string
+}
+
 export default async function ArticlesPage({ searchParams }: ArticlesPageProps) {
   const page = parseInt(searchParams.page || '1')
   const category = searchParams.category
   const tag = searchParams.tag
   const sort = searchParams.sort || 'newest'
 
-  const articles = await getDatabase()
+  const articles = await getDatabase() as Article[]
   const categories = await getCategories()
 
   // 筛选文章
   let filteredArticles = articles
 
   if (category) {
-    filteredArticles = filteredArticles.filter(article => article.category === category)
+    filteredArticles = filteredArticles.filter((article: Article) => article.category === category)
   }
 
   if (tag) {
-    filteredArticles = filteredArticles.filter(article => article.tags.includes(tag))
+    filteredArticles = filteredArticles.filter((article: Article) => article.tags.includes(tag))
   }
 
   // 排序文章
   if (sort === 'newest') {
-    filteredArticles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    filteredArticles.sort((a: Article, b: Article) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } else if (sort === 'oldest') {
-    filteredArticles.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    filteredArticles.sort((a: Article, b: Article) => new Date(a.date).getTime() - new Date(b.date).getTime())
   } else if (sort === 'popular') {
-    filteredArticles.sort((a, b) => (b.views || 0) - (a.views || 0))
+    filteredArticles.sort((a: Article, b: Article) => (b.views || 0) - (a.views || 0))
   }
 
   // 分页
@@ -111,7 +128,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
 
           <div className={`grid gap-6 ${siteConfig.pages.articles.grid.columns}`}>
             {currentArticles.length > 0 ? (
-              currentArticles.map((article) => (
+              currentArticles.map((article: Article) => (
                 <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
                   <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                     <div className="relative overflow-hidden">

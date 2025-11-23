@@ -41,40 +41,20 @@ interface HomePageProps {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  console.log("[v0] Starting to fetch data from Notion...")
-
   const currentPage = parseInt(searchParams.page || '1')
   const currentCategory = searchParams.category
-  let articles = []
-  let categories = []
-  let notionError = null
-  let isConnected = false
 
-  try {
-    // 改为串行获取，避免 Notion Client 在 Next.js 环境下的并发 fetch 问题
-    articles = await getDatabase()
+  // 获取文章和分类数据
+  const articles = await getDatabase()
 
-    // 从文章列表中提取分类，避免额外的 API 调用和潜在的 fetch 错误
-    const categorySet = new Set<string>()
-    articles.forEach((article: any) => {
-      if (article.category) {
-        categorySet.add(article.category)
-      }
-    })
-    categories = Array.from(categorySet).map(name => ({ name, color: 'default' }))
-
-    isConnected = articles.length > 0 && articles[0].id !== "1" // First fallback article has id "1"
-    console.log("[v0] Successfully fetched", articles.length, "articles and", categories.length, "categories")
-  } catch (error) {
-    console.error("[v0] Error fetching data:", error)
-    notionError = error instanceof Error ? error.message : String(error)
-    // 使用空数组作为回退，getDatabase 和 getCategories 已经处理了回退逻辑
-    articles = await getDatabase()
-    categories = (await getCategories()) || []
-  }
-
-  const hasApiKey = !!process.env.NOTION_API_KEY
-  const hasDatabaseId = !!process.env.NOTION_DATABASE_ID
+  // 从文章列表中提取分类
+  const categorySet = new Set<string>()
+  articles.forEach((article: any) => {
+    if (article.category) {
+      categorySet.add(article.category)
+    }
+  })
+  const categories = Array.from(categorySet).map(name => ({ name, color: 'default' }))
 
   // 分类筛选逻辑
   let filteredArticles = articles
@@ -100,7 +80,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <div className="mb-6">
               <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-white/30 text-sm text-blue-600 mb-4">
                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                {process.env.NOTION_API_KEY && process.env.NOTION_DATABASE_ID ? "实时同步Notion数据" : "演示数据模式"}
+                实时同步Notion数据
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
@@ -109,9 +89,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               <span className="text-2xl md:text-3xl font-normal text-gray-600">记录学习与成长</span>
             </h1>
             <p className="text-lg md:text-xl mb-8 text-gray-600 max-w-2xl mx-auto">
-              {process.env.NOTION_API_KEY && process.env.NOTION_DATABASE_ID
-                ? "基于 Notion 数据库构建的知识分享平台，专注于优质资源收集与知识传播"
-                : "演示模式 - 配置 Notion API 后可实时同步数据"}
+              基于 Notion 数据库构建的知识分享平台
+              <br />
+              专注于优质资源收集与知识传播
             </p>
           </div>
         </div>
@@ -126,7 +106,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <div className="text-sm text-gray-500">
               共 {filteredArticles.length} 篇文章
               {currentCategory && <span className="text-blue-600 ml-2">• 分类：{currentCategory}</span>}
-              {!process.env.NOTION_API_KEY && <span className="text-orange-500 ml-2">(演示数据)</span>}
             </div>
           </div>
           <HomeCategoryFilter
@@ -221,13 +200,13 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             </p>
 
             <div className="flex justify-center space-x-4 mb-8">
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-blue-50 hover:text-blue-600">
+              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600">
                 <Github className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-blue-50 hover:text-blue-600">
+              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600">
                 <Twitter className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full hover:bg-blue-50 hover:text-blue-600">
+              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600">
                 <Mail className="w-5 h-5" />
               </Button>
             </div>
