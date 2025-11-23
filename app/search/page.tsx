@@ -384,7 +384,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 {!hasSearchOrFilter && <Sparkles className="w-6 h-6 text-blue-600" />}
-                {hasSearchOrFilter ? '搜索结果' : '随机推荐'}
+                {hasSearchOrFilter ? '搜索结果' : '推荐'}
               </h2>
 
               {displayArticles.length > 0 && (
