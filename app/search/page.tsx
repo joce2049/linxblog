@@ -1,17 +1,17 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Eye, Heart, MessageCircle, Calendar, Search, Filter, X } from "lucide-react"
+import { Eye, Heart, MessageCircle, Calendar, Search, Filter, X, Sparkles } from "lucide-react"
 
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import { generateArticleUrl } from "@/lib/utils"
 import Link from "next/link"
-import UnifiedImage from "@/components/UnifiedImage"
+import Image from "next/image"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
@@ -50,6 +50,21 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.category || '')
   const [selectedTag, setSelectedTag] = useState(searchParams.tag || '')
   const [sortBy, setSortBy] = useState(searchParams.sort || 'relevance')
+
+  // 计算随机推荐文章（使用 useMemo 避免重新计算）
+  const randomRecommendations = useMemo(() => {
+    if (articles.length === 0) return []
+
+    // 随机打乱数组
+    const shuffled = [...articles].sort(() => Math.random() - 0.5)
+
+    // PC: 10个, 平板: 8个, 手机: 6个
+    const limit = typeof window !== 'undefined'
+      ? window.innerWidth >= 1024 ? 10 : window.innerWidth >= 768 ? 8 : 6
+      : 10
+
+    return shuffled.slice(0, limit)
+  }, [articles])
 
   useEffect(() => {
     fetchData()
@@ -222,6 +237,12 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     window.history.pushState({}, '', url.toString())
   }
 
+  // 判断是否有搜索或筛选条件
+  const hasSearchOrFilter = searchQuery.trim() || selectedCategory || selectedTag || sortBy !== 'relevance'
+
+  // 显示的文章列表：如果有搜索/筛选则显示结果，否则显示随机推荐
+  const displayArticles = hasSearchOrFilter ? filteredArticles : randomRecommendations
+
   const highlightText = (text: string, query: string) => {
     if (!query.trim()) return text
     const regex = new RegExp(`(${query})`, 'gi')
@@ -361,18 +382,19 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
           {/* Search Results */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
-                搜索结果
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                {!hasSearchOrFilter && <Sparkles className="w-6 h-6 text-blue-600" />}
+                {hasSearchOrFilter ? '搜索结果' : '随机推荐'}
               </h2>
 
-              {filteredArticles.length > 0 && (
+              {displayArticles.length > 0 && (
                 <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl font-medium">
-                  找到 {filteredArticles.length} 个相关资源
+                  {hasSearchOrFilter ? `找到 ${filteredArticles.length} 个相关资源` : `为您推荐 ${randomRecommendations.length} 个精选资源`}
                 </div>
               )}
             </div>
 
-            {filteredArticles.length === 0 ? (
+            {displayArticles.length === 0 ? (
               <div className="bg-white/90 backdrop-blur-md border-0 rounded-2xl shadow-xl shadow-gray-500/10">
                 <div className="p-16 text-center">
                   <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -394,15 +416,19 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-                {filteredArticles.map((article) => (
+                {displayArticles.map((article) => (
                   <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
                     <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                       <div className="relative overflow-hidden">
                         {article.image && (
-                          <UnifiedImage
+                          <Image
                             src={article.image}
                             alt={article.title}
+                            width={800}
+                            height={450}
                             className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                            quality={75}
                           />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
