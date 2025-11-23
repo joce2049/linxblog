@@ -29,9 +29,8 @@ const ArticleStatsDisplay = nextDynamic(
   }
 )
 
-// 强制动态渲染，确保每次请求都获取最新的 Notion 图片 URL
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// 启用 ISR，每 5 分钟重新验证
+export const revalidate = 300
 
 interface HomePageProps {
   searchParams: {

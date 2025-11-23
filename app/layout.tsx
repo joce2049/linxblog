@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   description: '分享优质的设计资源、开发工具、学习资料，助力创作者和开发者提升技能',
   keywords: [
     '设计资源',
-    '开发工具', 
+    '开发工具',
     '学习资料',
     '前端开发',
     'UI设计',
@@ -88,6 +88,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://api.notion.com" />
+      </head>
       <body className="font-sans antialiased bg-gray-50">
         <ErrorBoundary>
           <ThemeProvider
@@ -98,10 +102,10 @@ export default function RootLayout({
           >
             {/* 阅读进度条 */}
             <ReadingProgressBar />
-            
+
             {/* 主要内容 */}
             {children}
-            
+
             {/* 返回顶部按钮 */}
             <BackToTop />
           </ThemeProvider>

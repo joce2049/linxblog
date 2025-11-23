@@ -20,9 +20,8 @@ import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
 
-// 强制动态渲染
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// 启用 ISR，每 5 分钟重新验证
+export const revalidate = 300
 
 interface ArticlesPageProps {
   searchParams: {
