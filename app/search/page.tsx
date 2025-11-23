@@ -11,7 +11,7 @@ import { Eye, Heart, MessageCircle, Calendar, Search, Filter, X, Sparkles } from
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import { generateArticleUrl } from "@/lib/utils"
 import Link from "next/link"
-import Image from "next/image"
+import UnifiedImage from "@/components/UnifiedImage"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
@@ -421,14 +421,10 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                     <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
                       <div className="relative overflow-hidden">
                         {article.image && (
-                          <Image
+                          <UnifiedImage
                             src={article.image}
                             alt={article.title}
-                            width={800}
-                            height={450}
                             className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                            quality={75}
                           />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
