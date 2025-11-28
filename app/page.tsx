@@ -1,4 +1,5 @@
-import { MessageCircle, Heart, Eye, Github, Twitter, Mail } from "lucide-react"
+import { MessageCircle, Heart, Eye, Mail } from "lucide-react"
+import { BilibiliIcon, XiaohongshuIcon } from "@/components/SocialIcons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -195,18 +196,52 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </div>
             </div>
             <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
-              基于 Notion 数据库的知识分享平台，专注于优质内容收集与传播
+              分享优质的资源、影视应用、学习资料，助力创作者和开发者提升技能
             </p>
 
             <div className="flex justify-center space-x-4 mb-8">
-              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600">
-                <Github className="w-5 h-5" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                asChild
+              >
+                <a
+                  href="https://space.bilibili.com/173981850"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="哔哩哔哩"
+                >
+                  <BilibiliIcon className="w-5 h-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600">
-                <Twitter className="w-5 h-5" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full text-gray-600 hover:bg-pink-50 hover:text-pink-600"
+                asChild
+              >
+                <a
+                  href="https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="小红书"
+                >
+                  <XiaohongshuIcon className="w-5 h-5" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600">
-                <Mail className="w-5 h-5" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                asChild
+              >
+                <a
+                  href="mailto:contact@linx.com"
+                  aria-label="邮件联系"
+                >
+                  <Mail className="w-5 h-5" />
+                </a>
               </Button>
             </div>
 

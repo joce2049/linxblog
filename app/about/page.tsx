@@ -3,8 +3,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  Github,
-  Twitter,
   Mail,
   Globe,
   Code,
@@ -16,6 +14,7 @@ import {
   Heart,
   Search
 } from "lucide-react"
+import { BilibiliIcon, XiaohongshuIcon } from "@/components/SocialIcons"
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import Link from "next/link"
 
@@ -47,9 +46,9 @@ export default async function AboutPage() {
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">关于 LinX 后期工坊</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              基于 Notion 数据库构建的现代化知识分享平台
+              分享优质的资源、影视应用、学习资料
               <br />
-              专注于优质内容收集与传播
+              助力创作者和开发者提升技能
             </p>
           </div>
 
@@ -181,13 +180,13 @@ export default async function AboutPage() {
                     <Mail className="w-5 h-5" />
                     <span>contact@linx.com</span>
                   </a>
-                  <a href="https://github.com/linx" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
-                    <Github className="w-5 h-5" />
-                    <span>GitHub</span>
+                  <a href="https://space.bilibili.com/173981850" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                    <BilibiliIcon className="w-5 h-5" />
+                    <span>哔哩哔哩</span>
                   </a>
-                  <a href="https://twitter.com/linx" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                    <span>Twitter</span>
+                  <a href="https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 transition-colors">
+                    <XiaohongshuIcon className="w-5 h-5" />
+                    <span>小红书</span>
                   </a>
                 </div>
               </CardContent>
