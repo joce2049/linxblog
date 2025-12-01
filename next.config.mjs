@@ -7,6 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true, // 禁用图片优化，避免消耗 Vercel 额度
     remotePatterns: [
       {
         protocol: 'https',
