@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getDatabase, getCategories } from '@/lib/notion'
 import { generateArticleUrl } from '@/lib/utils'
+import { siteConfig } from '@/config/site'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
@@ -9,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getCategories()
     ])
 
-    const baseUrl = 'https://your-domain.com'
+    const baseUrl = siteConfig.url
 
     // 静态页面
     const staticPages = [
@@ -52,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]
 
     // 文章页面
-    const articlePages = articles.map((article) => ({
+    const articlePages = articles.map((article: any) => ({
       url: `${baseUrl}${generateArticleUrl(article.title, article.id)}`,
       lastModified: new Date(article.date),
       changeFrequency: 'monthly' as const,
@@ -60,7 +61,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
     // 分类页面
-    const categoryPages = categories.map((category) => ({
+    const categoryPages = categories.map((category: any) => ({
       url: `${baseUrl}/articles?category=${encodeURIComponent(category.name)}`,
       lastModified: new Date(),
       changeFrequency: 'weekly' as const,
@@ -70,11 +71,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [...staticPages, ...articlePages, ...categoryPages]
   } catch (error) {
     console.error('Error generating sitemap:', error)
-    
+
     // 返回基础页面作为回退
     return [
       {
-        url: 'https://your-domain.com',
+        url: siteConfig.url,
         lastModified: new Date(),
         changeFrequency: 'daily',
         priority: 1,

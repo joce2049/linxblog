@@ -131,96 +131,40 @@ npm run dev
 
 ## ⚙️ 配置说明
 
-### 分类筛选器配置
+本项目支持丰富的自定义配置，所有配置都集中在 `config/site.ts` 文件中。
 
-项目支持完全自定义的分类筛选器配置，用户可以通过修改 `config/site.ts` 文件来控制分类的显示、隐藏、排序和样式。
+### 📖 完整配置文档
 
-#### 主要配置选项
+详细的配置说明请查看：**[配置文档](./config/README.md)**
 
-```typescript
-// 在 config/site.ts 的 features.categoryManagement.filter 部分
-filter: {
-  enabled: true,           // 是否启用分类筛选器
-  showAllButton: true,     // 是否显示"全部"按钮
-  maxVisible: 10,          // 最大可见分类数量
-  
-  visibility: {
-    mode: "show_all",      // 显示模式：show_all | hide_all | custom
-    custom: {
-      show: ["视频", "软件", "三维", "平面"], // 要显示的分类
-      hide: [],            // 要隐藏的分类
-    },
-    order: ["视频", "软件", "三维", "平面"], // 分类显示顺序
-  },
-  
-  styling: {
-    buttonSize: "sm",      // 按钮大小：sm | md | lg
-    buttonVariant: "outline", // 按钮样式
-    colors: {
-      active: "blue",      // 选中状态颜色
-      inactive: "gray",    // 未选中状态颜色
-      hover: "blue",       // 悬停状态颜色
-    },
-  },
-}
+### 🎯 快速配置
+
+常用配置模块：
+
+- **品牌信息**: `siteConfig.brand` - 网站名称、Logo、颜色、标语
+- **SEO 配置**: `siteConfig.seo` - 标题、描述、关键词、OpenGraph
+- **社交媒体**: `siteConfig.social` - 邮箱、B站、小红书等平台
+- **导航菜单**: `siteConfig.navigation` - 主导航、页脚链接
+- **页脚配置**: `siteConfig.footer` - 描述、链接、版权信息
+- **功能开关**: `siteConfig.features` - 评论、分析、搜索、RSS
+- **分类筛选**: `siteConfig.features.categoryManagement` - 显示/隐藏、排序、样式
+
+### 🔧 环境变量
+
+创建 `.env.local` 文件：
+
+```bash
+# Notion 配置
+NOTION_API_KEY=your_notion_api_key
+NOTION_DATABASE_ID=your_database_id
+
+# Supabase 配置（如使用）
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
 ```
 
-#### 快速配置示例
+> 💡 更多配置选项和详细说明，请查看 [配置文档](./config/README.md)
 
-- **只显示核心分类**: 设置 `visibility.mode: "custom"` 并配置 `custom.show` 数组
-- **隐藏特定分类**: 在 `custom.hide` 数组中添加要隐藏的分类名称
-- **自定义样式**: 修改 `styling` 部分的颜色和尺寸配置
-- **响应式布局**: 设置 `maxVisible` 控制分类显示数量，超出时自动显示展开按钮
-
-详细配置说明请参考 `docs/category-filter-config.md` 文件。
-
-### Notion 数据库配置
-
-项目使用 `config/site.ts` 文件进行集中配置管理：
-
-```typescript
-export const envConfig = {
-  notion: {
-    apiKey: process.env.NOTION_API_KEY!,
-    databaseId: process.env.NOTION_DATABASE_ID!,
-    properties: {
-      title: '标题',
-      description: '描述',
-      category: '分类',
-      tags: '标签',
-      image: '封面图片',
-      url: '资源链接',
-      date: '创建时间',
-      views: '浏览量',
-      likes: '点赞数',
-      comments: '评论数'
-    }
-  }
-}
-```
-
-### 页面布局配置
-
-可以自定义各个页面的网格布局：
-
-```typescript
-export const siteConfig = {
-  pages: {
-    home: {
-      grid: {
-        columns: 3, // 首页文章卡片列数
-        gap: 6      // 间距
-      }
-    },
-    articles: {
-      grid: {
-        columns: 5, // 文章页面列数
-        gap: 6      // 间距
-      }
-    }
-  }
-}
-```
 
 ## 🔧 可用脚本
 

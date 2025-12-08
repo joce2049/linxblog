@@ -84,14 +84,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-              LinX 后期工坊
+              {siteConfig.pages.home.title}
               <br />
-              <span className="text-2xl md:text-3xl font-normal text-gray-600">资源分享与技术交流</span>
+              <span className="text-2xl md:text-3xl font-normal text-gray-600">{siteConfig.pages.home.subtitle}</span>
             </h1>
             <p className="text-lg md:text-lg mb-8 text-gray-600 max-w-2xl mx-auto">
-              声明：分享资源仅供用户交流学习与研究使用，版权归属原版权方所有
+              {siteConfig.pages.home.disclaimer.line1}
               <br />
-              若无意中侵犯到您的版权利益，请联系我，第一时间给予处理！
+              {siteConfig.pages.home.disclaimer.line2}
             </p>
           </div>
         </div>
@@ -192,7 +192,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </div>
             </div>
             <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
-              分享优质的资源、影视应用、学习资料，助力创作者和开发者提升技能
+              {siteConfig.footer.description}
             </p>
 
             <div className="flex justify-center space-x-4 mb-8">

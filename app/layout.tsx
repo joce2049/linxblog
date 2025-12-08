@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import ReadingProgressBar from '@/components/ReadingProgressBar'
 import BackToTop from '@/components/BackToTop'
+import { siteConfig } from '@/config/site'
 
 // 配置字体
 const inter = Inter({
@@ -19,24 +20,17 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
+
 export const metadata: Metadata = {
   title: {
-    default: 'Lindx Blog - 资源分享与技术交流',
-    template: '%s | Lindx Blog'
+    default: siteConfig.seo.metadata.title,
+    template: siteConfig.seo.metadata.titleTemplate
   },
-  description: '分享优质的设计资源、开发工具、学习资料，助力创作者和开发者提升技能',
-  keywords: [
-    '设计资源',
-    '开发工具',
-    '学习资料',
-    '前端开发',
-    'UI设计',
-    '技术博客',
-    '资源分享'
-  ],
-  authors: [{ name: 'Lindx' }],
-  creator: 'Lindx',
-  publisher: 'Lindx Blog',
+  description: siteConfig.seo.metadata.description,
+  keywords: siteConfig.seo.metadata.keywords,
+  authors: [{ name: siteConfig.seo.metadata.author }],
+  creator: siteConfig.seo.metadata.author,
+  publisher: siteConfig.seo.metadata.siteName,
   robots: {
     index: true,
     follow: true,
@@ -50,34 +44,33 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'zh_CN',
-    url: 'https://lindx-blog.vercel.app',
-    siteName: 'Lindx Blog',
-    title: 'Lindx Blog - 资源分享与技术交流',
-    description: '分享优质的设计资源、开发工具、学习资料，助力创作者和开发者提升技能',
+    locale: siteConfig.seo.metadata.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.seo.metadata.siteName,
+    title: siteConfig.seo.metadata.title,
+    description: siteConfig.seo.metadata.description,
     images: [
       {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Lindx Blog',
+        url: siteConfig.seo.metadata.ogImage.url,
+        width: siteConfig.seo.metadata.ogImage.width,
+        height: siteConfig.seo.metadata.ogImage.height,
+        alt: siteConfig.seo.metadata.ogImage.alt,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Lindx Blog - 资源分享与技术交流',
-    description: '分享优质的设计资源、开发工具、学习资料，助力创作者和开发者提升技能',
-    images: ['/og-image.jpg'],
-    creator: '@lindx',
+    title: siteConfig.seo.metadata.title,
+    description: siteConfig.seo.metadata.description,
+    images: [siteConfig.seo.metadata.ogImage.url],
+    creator: `@${siteConfig.seo.metadata.author}`,
   },
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
-    yahoo: 'your-yahoo-verification-code',
+    google: siteConfig.seo.verification.google,
+    // bing: siteConfig.seo.verification.bing,
   },
   alternates: {
-    canonical: 'https://lindx-blog.vercel.app',
+    canonical: siteConfig.url,
   },
 }
 

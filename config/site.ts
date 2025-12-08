@@ -4,57 +4,134 @@
  */
 
 export const siteConfig = {
-  // 基本信息
+  // ==================== 品牌配置 ====================
+  brand: {
+    name: "LinX 后期工坊",
+    logo: "/logo.png",
+    favicon: "/favicon.ico",
+    // 品牌色彩
+    colors: {
+      primary: "#3B82F6",    // blue-500
+      secondary: "#8B5CF6",  // purple-500
+      accent: "#10B981"      // green-500
+    },
+    // 品牌标语
+    tagline: "资源分享与技术交流",
+    slogan: "分享优质的资源、影视应用、学习资料，助力创作者和开发者提升技能"
+  },
+
+  // ==================== 基本信息 ====================
   name: "LinX 后期工坊",
   description: "基于 Notion 数据库构建的知识分享平台，专注于优质内容收集与传播",
-  url: "https://your-domain.com",
-  
-  // 联系信息
-  contact: {
-    email: "contact@linx.com",
-    github: "https://github.com/linx",
-    twitter: "https://twitter.com/linx",
-    wechat: "your-wechat-id",
+  // 网站域名 - 请修改为你的实际域名（用于 SEO、sitemap、OpenGraph 等）
+  url: "https://vioiv.me",
+
+  // ==================== SEO 配置 ====================
+  seo: {
+    enabled: true,
+    metadata: {
+      title: "LinX 后期工坊",
+      titleTemplate: "%s | LinX 后期工坊",
+      description: "分享优质的资源、影视应用、学习资料，助力创作者和开发者提升技能",
+      keywords: [
+        "资源分享",
+        "设计资源",
+        "开发工具",
+        "学习资料",
+        "影视后期",
+        "Notion",
+        "技术博客"
+      ],
+      author: "LinX",
+      siteName: "LinX 后期工坊",
+      locale: "zh_CN",
+      // OpenGraph 图片
+      ogImage: {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "LinX 后期工坊"
+      }
+    },
+    // 搜索引擎验证（可选）
+    verification: {
+      google: "",
+      baidu: "",
+      bing: ""
+    }
   },
-  
-  // 社交媒体链接
+
+  // ==================== 社交媒体配置 ====================
   social: {
-    github: "https://github.com/linx",
-    twitter: "https://twitter.com/linx",
-    weibo: "https://weibo.com/linx",
-    bilibili: "https://space.bilibili.com/linx",
+    // 联系邮箱
+    email: "contact@linx.com",
+    // 社交平台
+    platforms: {
+      bilibili: {
+        name: "哔哩哔哩",
+        url: "https://space.bilibili.com/173981850",
+        icon: "BilibiliIcon",
+        show: true
+      },
+      xiaohongshu: {
+        name: "小红书",
+        url: "https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89",
+        icon: "XiaohongshuIcon",
+        show: true
+      }
+    }
   },
-  
-                // 导航菜单配置
-              navigation: {
-                main: [
-                  { name: "首页", href: "/", icon: "Home", visible: true },
-                  { name: "文章", href: "/articles", icon: "FileText", visible: true },
-                  { name: "分类", href: "/categories", icon: "Folder", visible: true },
-                  { name: "标签", href: "/tags", icon: "Tag", visible: true },
-                  { name: "关于", href: "/about", icon: "Info", visible: true },
-                ],
-                footer: [
-                  { name: "关于本站", href: "/about" },
-                  { name: "友情链接", href: "/links" },
-                  { name: "隐私政策", href: "/privacy" },
-                  { name: "RSS订阅", href: "/rss" },
-                ],
-                // 导航栏配置
-                config: {
-                  showSearch: true,           // 是否显示搜索框
-                  showUserMenu: false,        // 是否显示用户菜单
-                  showLanguageSwitch: false,  // 是否显示语言切换
-                  enableSubmenu: true,        // 是否启用二级菜单
-                  mobileBreakpoint: "md",     // 移动端断点
-                },
-              },
-  
-  // 页面配置
+
+  // ==================== 导航菜单配置 ====================
+  navigation: {
+    main: [
+      { name: "首页", href: "/", icon: "Home", visible: true },
+      { name: "文章", href: "/articles", icon: "FileText", visible: true },
+      { name: "分类", href: "/categories", icon: "Folder", visible: true },
+      { name: "标签", href: "/tags", icon: "Tag", visible: true },
+      { name: "关于", href: "/about", icon: "Info", visible: true },
+    ],
+    // 导航栏配置
+    config: {
+      showSearch: true,           // 是否显示搜索框
+      showUserMenu: false,        // 是否显示用户菜单
+      showLanguageSwitch: false,  // 是否显示语言切换
+      enableSubmenu: true,        // 是否启用二级菜单
+      mobileBreakpoint: "md",     // 移动端断点
+    },
+  },
+
+  // ==================== 页脚配置 ====================
+  footer: {
+    // 页脚描述
+    description: "分享优质的资源、影视应用、学习资料，助力创作者和开发者提升技能",
+    // 导航链接
+    links: [
+      { name: "关于本站", href: "/about" },
+      { name: "友情链接", href: "/links" },
+      { name: "隐私政策", href: "/privacy" },
+      { name: "RSS订阅", href: "/rss" },
+    ],
+    // 版权信息
+    copyright: {
+      year: 2024,
+      owner: "LinX 后期工坊",
+      statement: "Powered by Notion API & Next.js"
+    },
+    // 是否显示社交媒体链接
+    showSocial: true
+  },
+
+  // ==================== 页面配置 ====================
   pages: {
     home: {
-      heroTitle: "发现优质资源，提升创作效率",
-      heroSubtitle: "基于 Notion 数据库构建的知识分享平台",
+      // Hero 区域文本
+      title: "LinX 后期工坊",
+      subtitle: "资源分享与技术交流",
+      disclaimer: {
+        line1: "声明：分享资源仅供用户交流学习与研究使用，版权归属原版权方所有",
+        line2: "若无意中侵犯到您的版权利益，请联系我，第一时间给予处理！"
+      },
       featuredCount: 30, // 首页显示的文章数量
       pagination: {
         itemsPerPage: 30, // 每页显示的文章数量
@@ -63,21 +140,20 @@ export const siteConfig = {
       },
       // 网格布局配置
       grid: {
-        columns: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5", // 响应式列数
-        gap: "gap-6", // 网格间距
+        columns: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+        gap: "gap-6",
       },
     },
     articles: {
-      itemsPerPage: 30, // 每页显示的文章数量
+      itemsPerPage: 30,
       sortOptions: [
         { value: "newest", label: "最新" },
         { value: "oldest", label: "最旧" },
         { value: "popular", label: "最热" },
       ],
-      // 网格布局配置
       grid: {
-        columns: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5", // 响应式列数
-        gap: "gap-6", // 网格间距
+        columns: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+        gap: "gap-6",
       },
     },
     search: {
@@ -89,8 +165,8 @@ export const siteConfig = {
       ],
     },
   },
-  
-  // UI 配置
+
+  // ==================== UI 配置 ====================
   ui: {
     theme: {
       primary: "blue",
@@ -98,80 +174,68 @@ export const siteConfig = {
       accent: "green",
     },
     layout: {
-      maxWidth: "7xl", // Tailwind 的 max-width 类
+      maxWidth: "7xl",
       containerPadding: "px-4 sm:px-6 lg:px-8",
     },
     cards: {
       imageAspectRatio: "aspect-video",
       hoverEffect: true,
-      showStats: true, // 是否显示浏览量、点赞等统计
+      showStats: true,
     },
   },
-  
-  // 功能配置
-  features: {
-    // 分类管理配置
-    categoryManagement: {
-      enabled: true,
-      // 分类筛选器功能
-      filter: {
-        enabled: true,
-        showAllButton: true,
-        maxVisible: 15, // 显示所有分类
-        // 分类可见性控制
-        visibility: {
-          mode: "custom", // show_all | hide_all | custom
-          // 当 mode 为 "custom" 时的具体配置
-          custom: {
-            // 要显示的分类（优先级从高到低）
-            show: [
-              "视频",
-              "软件",
-              "三维", 
-              "平面",
-              "音频",
-              "插件", 
-              "LUT",
-              "AIGC"
-            ],
-            // 要隐藏的分类
-            hide: [
-              "脚本",
-              "样机"
-            ],
-          },
-          // 分类显示顺序（影响优先级）
-          order: [
-            "视频",
-            "软件",
-            "三维",
-            "平面", 
-            "音频"
-          ],
-        },
-        // 样式和交互配置
-        styling: {
-          buttonSize: "md", // sm | md | lg
-          buttonVariant: "default", // outline | default | ghost
-          colors: {
-            active: "green", // 选中状态颜色
-            inactive: "slate", // 未选中状态颜色
-            hover: "emerald", // 悬停状态颜色
-          },
-          showCount: false, // 是否显示分类文章数量
-          responsive: true, // 是否启用响应式布局
-        },
-        // 高级功能
-        advanced: {
-          enableSearch: false, // 是否在分类筛选器中启用搜索
-          enableGrouping: false, // 是否启用分类分组
-          enableFavorites: false, // 是否启用用户收藏分类
-          enableHistory: false, // 是否记录用户筛选历史
-        },
-      },
+
+  // ==================== 性能优化配置 ====================
+  performance: {
+    // 图片优化
+    images: {
+      lazy: true,              // 懒加载
+      placeholder: "blur",     // 占位符
+      quality: 75,             // 默认质量
+      formats: ["avif", "webp"] // 支持格式
     },
+    // 缓存配置（秒）
+    cache: {
+      staticAssets: 31536000,  // 静态资源缓存（1年）
+      apiData: 300,            // API数据缓存（5分钟）
+    },
+    // 预加载
+    prefetch: {
+      enabled: true,
+      priority: ["articles"]   // 优先预加载的页面
+    }
+  },
+
+  // ==================== 通知配置 ====================
+  notifications: {
+    enabled: true,
+    // 横幅通知
+    banner: {
+      show: true,
+      type: "info",        // info | warning | success | error
+      message: "博主正在后台更新中...",
+      dismissible: true,   // 是否可关闭
+      icon: true           // 是否显示图标
+    }
+  },
+
+  // ==================== 功能配置 ====================
+  features: {
+    // 评论系统
+    comments: {
+      enabled: false,
+      provider: "disqus",  // disqus | giscus | utterances
+      config: {}
+    },
+    // 统计分析
+    analytics: {
+      enabled: true,
+      provider: "supabase", // google | umami | supabase
+      trackingId: ""
+    },
+    // 搜索功能
     search: {
       enabled: true,
+      provider: "local",    // local | algolia
       highlightResults: true,
       filters: {
         category: true,
@@ -179,26 +243,66 @@ export const siteConfig = {
         date: true,
       },
     },
-    comments: {
-      enabled: false, // 是否启用评论功能
-      provider: "disqus", // 评论系统提供商
-    },
-    analytics: {
-      enabled: false, // 是否启用分析统计
-      provider: "google", // 分析服务提供商
-      trackingId: "", // 跟踪 ID
-    },
-    seo: {
+    // RSS订阅
+    rss: {
       enabled: true,
-      defaultMeta: {
-        title: "LinX后期工坊 - 优质资源分享平台",
-        description: "基于 Notion 数据库构建的知识分享平台，专注于优质内容收集与传播",
-        keywords: "资源分享,设计资源,开发工具,学习资料,Notion",
+      feedUrl: "/feed.xml"
+    },
+    // 分类管理配置
+    categoryManagement: {
+      enabled: true,
+      filter: {
+        enabled: true,
+        showAllButton: true,
+        maxVisible: 15,
+        visibility: {
+          mode: "custom",
+          custom: {
+            show: [
+              "视频",
+              "软件",
+              "三维",
+              "平面",
+              "音频",
+              "插件",
+              "LUT",
+              "AIGC"
+            ],
+            hide: [
+              "脚本",
+              "样机"
+            ],
+          },
+          order: [
+            "视频",
+            "软件",
+            "三维",
+            "平面",
+            "音频"
+          ],
+        },
+        styling: {
+          buttonSize: "md",
+          buttonVariant: "default",
+          colors: {
+            active: "green",
+            inactive: "slate",
+            hover: "emerald",
+          },
+          showCount: false,
+          responsive: true,
+        },
+        advanced: {
+          enableSearch: false,
+          enableGrouping: false,
+          enableFavorites: false,
+          enableHistory: false,
+        },
       },
     },
   },
-  
-  // 内容配置
+
+  // ==================== 内容配置 ====================
   content: {
     categories: {
       defaultColor: "blue",
@@ -208,39 +312,49 @@ export const siteConfig = {
     tags: {
       defaultColor: "gray",
       showCount: true,
-      maxDisplay: 5, // 卡片上最多显示的标签数量
+      maxDisplay: 5,
     },
     articles: {
-      excerptLength: 120, // 文章摘要长度
+      excerptLength: 120,
       showDate: true,
       showAuthor: false,
       showReadingTime: false,
     },
-    // 相关资源推荐配置
     relatedArticles: {
-      maxCount: 5, // 最大推荐数量
+      maxCount: 5,
       priority: {
-        tagMatch: 10,      // 标签匹配权重
-        categoryMatch: 5,  // 分类匹配权重
-        highViews: 3,      // 高浏览量权重
-        recentDate: 2,     // 最近发布权重
+        tagMatch: 10,
+        categoryMatch: 5,
+        highViews: 3,
+        recentDate: 2,
       },
-      minViews: 100,       // 最低浏览量阈值
+      minViews: 100,
     },
   },
-  
-  // 部署配置
-  deployment: {
-    platform: "vercel", // 部署平台
-    environment: "production", // 环境
-    cdn: "https://cdn.your-domain.com", // CDN 地址
+
+  // ==================== 调试配置 ====================
+  debug: {
+    // 仅在开发环境启用
+    enabled: process.env.NODE_ENV === "development",
+    // 显示配置信息
+    showConfig: false,
+    // 显示性能指标
+    showPerformance: false,
+    // 日志级别
+    logLevel: "info" // error | warn | info | debug
   },
-  
-  // 维护配置
+
+  // ==================== 部署配置 ====================
+  deployment: {
+    platform: "vercel",
+    environment: "production",
+  },
+
+  // ==================== 维护配置 ====================
   maintenance: {
-    enabled: false, // 是否启用维护模式
+    enabled: false,
     message: "网站正在维护中，请稍后再试...",
-    allowedIPs: [], // 允许访问的 IP 地址
+    allowedIPs: [],
   },
 }
 
@@ -289,28 +403,28 @@ export interface CategoryManagementConfig {
 export const envConfig = {
   // Notion 配置
   notion: {
-    apiKey: process.env.NOTION_API_KEY || "secret_2oBA394pDpOFapIF1UTyoyj1hIBhNeSYit3LDq4O1l2",
-    databaseId: process.env.NOTION_DATABASE_ID || "10e560f6a07b8088809cede1dad50457",
+    apiKey: process.env.NOTION_API_KEY || "",
+    databaseId: process.env.NOTION_DATABASE_ID || "",
     // 数据库属性映射（根据你的实际数据库结构调整）
     properties: {
       title: "标题",
-      description: "期数", // 这个字段包含期数信息
-      content: "期数", // 用于显示文章内容
-      format: "格式", // 文件格式信息
+      description: "期数",
+      content: "期数",
+      format: "格式",
       category: "类型",
       tags: "标签",
       image: "封面",
       views: "评分",
       likes: "热门资源",
       date: "创建时间",
-      url: "网盘1", // 备用：网盘2
-      status: "Published", // 固定值，因为你的数据库没有状态字段
+      url: "网盘1",
+      status: "Published",
     },
     // 数据获取配置
     fetch: {
-      pageSize: 100, // Notion API 每页最大数量
-      maxRetries: 3, // 最大重试次数
-      retryDelay: 1000, // 重试延迟（毫秒）
+      pageSize: 100,
+      maxRetries: 3,
+      retryDelay: 1000,
     },
   },
 

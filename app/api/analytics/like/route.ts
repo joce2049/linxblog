@@ -1,8 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { rateLimit, getClientIp, rateLimitConfigs } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
     try {
+        // 速率限制检查
+        const ip = getClientIp(request)
+        const rateLimitResult = rateLimit(ip, rateLimitConfigs.like)
+
+        if (!rateLimitResult.success) {
+            return NextResponse.json(
+                {
+                    error: 'Too many requests',
+                    limit: rateLimitResult.limit,
+                    reset: rateLimitResult.reset
+                },
+                {
+                    status: 429,
+                    headers: {
+                        'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+                        'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+                        'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+                    }
+                }
+            )
+        }
+
         const { articleId, action } = await request.json()
 
         if (!articleId) {
