@@ -3,12 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { 
-  Home, 
-  FileText, 
-  Folder, 
-  Tag, 
-  Info, 
+import {
+  Home,
+  FileText,
+  Folder,
+  Tag,
+  Info,
   ChevronDown,
   Menu,
   X,
@@ -56,11 +56,13 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
     }
 
     if (item.name === '分类') {
+      // 从配置文件获取分类顺序
+      const categoryOrder = siteConfig.features.categoryManagement.filter.visibility.order
       return {
         ...baseItem,
-        children: categories.slice(0, 5).map(category => ({
-          name: category.name,
-          href: `/articles?category=${encodeURIComponent(category.name)}`,
+        children: categoryOrder.map(categoryName => ({
+          name: categoryName,
+          href: `/articles?category=${encodeURIComponent(categoryName)}`,
           icon: 'Folder',
           visible: true
         }))
@@ -71,8 +73,8 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
   })
 
   const toggleExpanded = (itemName: string) => {
-    setExpandedItems(prev => 
-      prev.includes(itemName) 
+    setExpandedItems(prev =>
+      prev.includes(itemName)
         ? prev.filter(name => name !== itemName)
         : [...prev, itemName]
     )
@@ -111,11 +113,10 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
         <Link
           key={child.name}
           href={child.href}
-          className={`flex items-center space-x-2 px-4 py-2 text-sm transition-colors ${
-            isMobileChild 
-              ? 'text-gray-600 hover:text-blue-600' 
-              : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-          }`}
+          className={`flex items-center space-x-2 px-4 py-2 text-sm transition-colors ${isMobileChild
+            ? 'text-gray-600 hover:text-blue-600'
+            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+            }`}
           onClick={() => isMobileChild && setIsMobileMenuOpen(false)}
         >
           <ChildIconComponent className="w-4 h-4" />
@@ -177,17 +178,17 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+          <Link href="/" className="flex items-center space-x-3 group cursor-pointer">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200 group-hover:scale-105">
               <span className="text-white font-bold text-lg">L</span>
             </div>
             <div>
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                LinX 后期工坊
+              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-blue-500 group-hover:to-purple-500 transition-all duration-200">
+                {siteConfig.brand.name}
               </span>
-              <div className="text-xs text-muted-foreground">基于Notion构建</div>
+              <div className="text-xs text-muted-foreground">{siteConfig.brand.tagline}</div>
             </div>
-          </div>
+          </Link>
 
           {/* 桌面端导航 - 居中 */}
           <nav className="hidden md:flex items-center space-x-1 absolute left-1/2 transform -translate-x-1/2">
@@ -239,7 +240,7 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
                 />
               </form>
             </div>
-            
+
             <nav className="space-y-2">
               {navigationItems.map(item => renderNavigationItem(item, true))}
             </nav>

@@ -17,6 +17,7 @@ import {
 import { BilibiliIcon, XiaohongshuIcon } from "@/components/SocialIcons"
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import Link from "next/link"
+import { siteConfig } from "@/config/site"
 
 // 强制动态渲染
 export const dynamic = 'force-dynamic'
@@ -44,11 +45,9 @@ export default async function AboutPage() {
             <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
               <span className="text-white font-bold text-3xl">L</span>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">关于 LinX 后期工坊</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">关于 {siteConfig.brand.name}</h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              分享优质的资源、影视应用、学习资料
-              <br />
-              助力创作者和开发者提升技能
+              {siteConfig.brand.slogan}
             </p>
           </div>
 
@@ -107,7 +106,7 @@ export default async function AboutPage() {
                 <p className="text-base font-medium">
                   公众号 / 小红书：
                   <a
-                    href="https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89"
+                    href={siteConfig.social.platforms.xiaohongshu.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
@@ -117,7 +116,7 @@ export default async function AboutPage() {
                   <span className="mx-3">•</span>
                   B站：
                   <a
-                    href="https://space.bilibili.com/173981850"
+                    href={siteConfig.social.platforms.bilibili.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
@@ -176,15 +175,15 @@ export default async function AboutPage() {
               <CardContent className="p-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">联系我们</h2>
                 <div className="space-y-3">
-                  <a href="mailto:contact@linx.com" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <a href={`mailto:${siteConfig.social.email}`} className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
                     <Mail className="w-5 h-5" />
-                    <span>contact@linx.com</span>
+                    <span>{siteConfig.social.email}</span>
                   </a>
-                  <a href="https://space.bilibili.com/173981850" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <a href={siteConfig.social.platforms.bilibili.url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
                     <BilibiliIcon className="w-5 h-5" />
                     <span>哔哩哔哩</span>
                   </a>
-                  <a href="https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 transition-colors">
+                  <a href={siteConfig.social.platforms.xiaohongshu.url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 transition-colors">
                     <XiaohongshuIcon className="w-5 h-5" />
                     <span>小红书</span>
                   </a>
@@ -220,7 +219,7 @@ export default async function AboutPage() {
               <span>Made with love for the creative community</span>
             </div>
             <p className="text-sm text-gray-500">
-              © 2024 LinX 后期工坊. 基于 Next.js 和 Notion 构建.
+              © {siteConfig.footer.copyright.year} {siteConfig.footer.copyright.owner}. {siteConfig.footer.copyright.statement}
             </p>
           </div>
         </div>

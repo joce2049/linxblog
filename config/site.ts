@@ -278,7 +278,8 @@ export const siteConfig = {
             "软件",
             "三维",
             "平面",
-            "音频"
+            "音频",
+            "插件"
           ],
         },
         styling: {

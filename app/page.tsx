@@ -181,14 +181,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-lg">L</span>
               </div>
               <div>
                 <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  LinX 后期工坊
+                  {siteConfig.brand.name}
                 </span>
-                <div className="text-xs text-gray-500">基于Notion构建</div>
+                <div className="text-xs text-gray-500">{siteConfig.brand.tagline}</div>
               </div>
             </div>
             <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
@@ -257,7 +257,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             </div>
 
             <div className="pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
-              <p>&copy; 2024 LinX 后期工坊. Powered by Notion API & Next.js.</p>
+              <p>&copy; {siteConfig.footer.copyright.year} {siteConfig.footer.copyright.owner}. {siteConfig.footer.copyright.statement}</p>
             </div>
           </div>
         </div>
