@@ -24,7 +24,7 @@ export const siteConfig = {
   name: "LinX 后期工坊",
   description: "基于 Notion 数据库构建的知识分享平台，专注于优质内容收集与传播",
   // 网站域名 - 请修改为你的实际域名（用于 SEO、sitemap、OpenGraph 等）
-  url: "https://vioiv.me",
+  url: "https://www.lindx.top",
 
   // ==================== SEO 配置 ====================
   seo: {
@@ -127,7 +127,7 @@ export const siteConfig = {
     home: {
       // Hero 区域文本
       title: "LinX 后期工坊",
-      subtitle: "资源分享与技术交流",
+      subtitle: "域名更新了：www.lindx.top，快收藏起来！",
       disclaimer: {
         line1: "声明：分享资源仅供用户交流学习与研究使用，版权归属原版权方所有",
         line2: "若无意中侵犯到您的版权利益，请联系我，第一时间给予处理！"
