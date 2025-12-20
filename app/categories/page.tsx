@@ -12,24 +12,24 @@ export default async function CategoriesPage() {
   const categories = await getCategories()
 
   // 统计每个分类下的文章数量
-  const categoryStats = categories.map(category => {
-    const count = articles.filter(article => article.category === category.name).length
+  const categoryStats = categories.map((category: any) => {
+    const count = articles.filter((article: any) => article.category === category.name).length
     const recentArticles = articles
-      .filter(article => article.category === category.name)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .filter((article: any) => article.category === category.name)
+      .sort((a: any, b: any) => new Date(b.lastEditedTime || b.date).getTime() - new Date(a.lastEditedTime || a.date).getTime())
       .slice(0, 3)
-    
+
     return {
       ...category,
       count,
       recentArticles
     }
-  }).sort((a, b) => b.count - a.count) // 按文章数量排序
+  }).sort((a: any, b: any) => b.count - a.count) // 按文章数量排序
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <ConfigurableNavigation categories={categories} />
-      
+
       <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-none mx-auto">
           {/* Page Header */}
@@ -42,7 +42,7 @@ export default async function CategoriesPage() {
 
           {/* Categories Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categoryStats.map((category) => (
+            {categoryStats.map((category: any) => (
               <Card
                 key={category.name}
                 className="bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 border-0 rounded-xl overflow-hidden group"
@@ -63,7 +63,7 @@ export default async function CategoriesPage() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <Link href={`/articles?category=${encodeURIComponent(category.name)}`}>
                       <Button
                         variant="ghost"
@@ -79,7 +79,7 @@ export default async function CategoriesPage() {
                   {category.recentArticles.length > 0 && (
                     <div className="space-y-3">
                       <h4 className="text-sm font-medium text-gray-700">最新资源</h4>
-                      {category.recentArticles.map((article) => (
+                      {category.recentArticles.map((article: any) => (
                         <div
                           key={article.id}
                           className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group/item"

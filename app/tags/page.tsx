@@ -12,24 +12,24 @@ export default async function TagsPage() {
   const categories = await getCategories()
 
   // 统计每个标签下的文章数量和最近文章
-  const tagStats = tags.map(tag => {
-    const count = articles.filter(article => article.tags.includes(tag.name)).length
+  const tagStats = tags.map((tag: any) => {
+    const count = articles.filter((article: any) => article.tags.includes(tag.name)).length
     const recentArticles = articles
-      .filter(article => article.tags.includes(tag.name))
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .filter((article: any) => article.tags.includes(tag.name))
+      .sort((a: any, b: any) => new Date(b.lastEditedTime || b.date).getTime() - new Date(a.lastEditedTime || a.date).getTime())
       .slice(0, 3)
-    
+
     return {
       ...tag,
       count,
       recentArticles
     }
-  }).sort((a, b) => b.count - a.count) // 按文章数量排序
+  }).sort((a: any, b: any) => b.count - a.count) // 按文章数量排序
 
   // 计算标签云数据
   const maxCount = Math.max(...tagStats.map(tag => tag.count))
   const minCount = Math.min(...tagStats.map(tag => tag.count))
-  
+
   const getTagSize = (count: number) => {
     if (count === maxCount) return 'text-2xl font-bold'
     if (count >= maxCount * 0.7) return 'text-xl font-semibold'
@@ -49,7 +49,7 @@ export default async function TagsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <ConfigurableNavigation categories={categories} />
-      
+
       <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-none mx-auto">
           {/* Page Header */}
@@ -117,7 +117,7 @@ export default async function TagsPage() {
                           </p>
                         </div>
                       </div>
-                      
+
                       <Link href={`/articles?tag=${encodeURIComponent(tag.name)}`}>
                         <Button
                           variant="ghost"
@@ -133,7 +133,7 @@ export default async function TagsPage() {
                     {tag.recentArticles.length > 0 && (
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-gray-700">相关资源</h4>
-                        {tag.recentArticles.map((article) => (
+                        {tag.recentArticles.map((article: any) => (
                           <div
                             key={article.id}
                             className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group/item"

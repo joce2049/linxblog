@@ -27,6 +27,7 @@ interface Article {
   likes: number
   comments: number
   date: string
+  lastEditedTime?: string
   url: string
   status: string
 }
@@ -174,10 +175,10 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     // 排序
     switch (sortBy) {
       case 'newest':
-        results.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        results.sort((a, b) => new Date(b.lastEditedTime || b.date).getTime() - new Date(a.lastEditedTime || a.date).getTime())
         break
       case 'oldest':
-        results.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        results.sort((a, b) => new Date(a.lastEditedTime || a.date).getTime() - new Date(b.lastEditedTime || b.date).getTime())
         break
       case 'popular':
         results.sort((a, b) => (b.views || 0) - (a.views || 0))

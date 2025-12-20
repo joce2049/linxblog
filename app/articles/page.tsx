@@ -45,6 +45,7 @@ interface Article {
   likes: number
   comments: number
   date: string
+  lastEditedTime?: string
   url: string
   status: string
 }
@@ -69,11 +70,11 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
     filteredArticles = filteredArticles.filter((article: Article) => article.tags.includes(tag))
   }
 
-  // 排序文章
+  // 根据排序选项排序
   if (sort === 'newest') {
-    filteredArticles.sort((a: Article, b: Article) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    filteredArticles.sort((a: Article, b: Article) => new Date(b.lastEditedTime || b.date).getTime() - new Date(a.lastEditedTime || a.date).getTime())
   } else if (sort === 'oldest') {
-    filteredArticles.sort((a: Article, b: Article) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    filteredArticles.sort((a: Article, b: Article) => new Date(a.lastEditedTime || a.date).getTime() - new Date(b.lastEditedTime || b.date).getTime())
   } else if (sort === 'popular') {
     filteredArticles.sort((a: Article, b: Article) => (b.views || 0) - (a.views || 0))
   }
