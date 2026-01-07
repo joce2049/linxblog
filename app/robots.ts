@@ -12,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         '/private/',
       ],
     },
-    sitemap: 'https://your-domain.com/sitemap.xml',
+    sitemap: 'https://lindx.top/sitemap.xml',
   }
 }

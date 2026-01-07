@@ -69,9 +69,6 @@ export const metadata: Metadata = {
     google: siteConfig.seo.verification.google,
     // bing: siteConfig.seo.verification.bing,
   },
-  alternates: {
-    canonical: siteConfig.url,
-  },
 }
 
 export default function RootLayout({
