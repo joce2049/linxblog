@@ -74,7 +74,7 @@ const brandName = siteConfig.brand.name
 ```typescript
 name: "LinX 后期工坊",           // 网站名称
 description: "...",              // 网站描述
-url: "https://vioiv.me"          // 网站域名（重要！）
+url: "https://lindx.top"          // 网站域名（重要！）
 ```
 
 ⚠️ **重要**：`url` 配置会影响：
