@@ -12,17 +12,13 @@ import {
   ChevronDown,
   Menu,
   X,
-  Search
+  Search,
+  ExternalLink,
 } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import type { NavItem } from '@/config/site'
 
-interface NavigationItem {
-  name: string
-  href: string
-  icon: string
-  visible: boolean
-  children?: NavigationItem[]
-}
+interface NavigationItem extends NavItem {}
 
 interface ConfigurableNavigationProps {
   categories: Array<{ name: string; color?: string }>
@@ -35,38 +31,25 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
 
   // 从配置文件获取导航配置
   const navigationItems: NavigationItem[] = siteConfig.navigation.main.map(item => {
-    const baseItem = {
+    const baseItem: NavigationItem = {
       name: item.name,
       href: item.href,
       icon: item.icon,
-      visible: true
+      visible: item.visible ?? true,
+      external: item.external,
     }
 
-    // 为特定项目添加子菜单
-    if (item.name === '文章') {
-      return {
-        ...baseItem,
-        children: [
-          { name: '所有文章', href: '/articles', icon: 'FileText', visible: true },
-          { name: '分类浏览', href: '/categories', icon: 'Folder', visible: true },
-          { name: '标签云', href: '/tags', icon: 'Tag', visible: true },
-          { name: '搜索资源', href: '/search', icon: 'Search', visible: true }
-        ]
-      }
-    }
-
-    if (item.name === '分类') {
-      // 从配置文件获取分类顺序
+    // children: "categories" 表示从分类配置动态生成
+    if (item.children === 'categories') {
       const categoryOrder = siteConfig.features.categoryManagement.filter.visibility.order
-      return {
-        ...baseItem,
-        children: categoryOrder.map(categoryName => ({
-          name: categoryName,
-          href: `/articles?category=${encodeURIComponent(categoryName)}`,
-          icon: 'Folder',
-          visible: true
-        }))
-      }
+      baseItem.children = categoryOrder.map(categoryName => ({
+        name: categoryName,
+        href: `/articles?category=${encodeURIComponent(categoryName)}`,
+        icon: 'Folder',
+        visible: true,
+      }))
+    } else if (Array.isArray(item.children)) {
+      baseItem.children = item.children
     }
 
     return baseItem
@@ -94,7 +77,8 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       Folder,
       Tag,
       Info,
-      Search: FileText
+      Search: FileText,
+      ExternalLink,
     }
     return iconMap[iconName] || FileText
   }
@@ -103,47 +87,87 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
     if (!item.visible) return null
 
     const IconComponent = getIcon(item.icon)
-    const hasChildren = item.children && item.children.length > 0
+    const hasChildren = Array.isArray(item.children) && item.children.length > 0
     const isExpanded = expandedItems.includes(item.name)
+
+    const children = hasChildren ? item.children as NavigationItem[] : []
 
     // 渲染子菜单项的函数
     const renderChildItem = (child: NavigationItem, isMobileChild: boolean = false) => {
       const ChildIconComponent = getIcon(child.icon)
+      const className = `flex items-center space-x-2 px-4 py-2 text-sm transition-colors ${
+        isMobileChild
+          ? 'text-gray-600 hover:text-blue-600'
+          : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+      }`
+
+      const content = (
+        <>
+          <ChildIconComponent className="w-4 h-4" />
+          <span>{child.name}</span>
+          {child.external && <ExternalLink className="w-3 h-3 text-gray-400" />}
+        </>
+      )
+
+      if (child.external) {
+        return (
+          <a
+            key={child.name}
+            href={child.href}
+            className={className}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => isMobileChild && setIsMobileMenuOpen(false)}
+          >
+            {content}
+          </a>
+        )
+      }
+
       return (
         <Link
           key={child.name}
           href={child.href}
-          className={`flex items-center space-x-2 px-4 py-2 text-sm transition-colors ${isMobileChild
-            ? 'text-gray-600 hover:text-blue-600'
-            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
-            }`}
+          className={className}
           onClick={() => isMobileChild && setIsMobileMenuOpen(false)}
         >
-          <ChildIconComponent className="w-4 h-4" />
-          <span>{child.name}</span>
+          {content}
         </Link>
       )
     }
 
+    const buttonContent = (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 px-4 py-2 rounded-lg transition-all duration-200 font-medium"
+        onClick={() => {
+          if (hasChildren) {
+            toggleExpanded(item.name)
+          } else {
+            setIsMobileMenuOpen(false)
+          }
+        }}
+      >
+        <IconComponent className="w-4 h-4" />
+        <span>{item.name}</span>
+        {item.external && <ExternalLink className="w-3 h-3 text-gray-400" />}
+        {hasChildren && (
+          <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+        )}
+      </Button>
+    )
+
     if (hasChildren) {
       return (
         <div key={item.name} className="relative group">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 px-4 py-2 rounded-lg transition-all duration-200 font-medium"
-            onClick={() => toggleExpanded(item.name)}
-          >
-            <IconComponent className="w-4 h-4" />
-            <span>{item.name}</span>
-            <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
-          </Button>
+          {buttonContent}
 
           {/* 桌面端下拉菜单 */}
           {!isMobile && (
             <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
               <div className="py-2">
-                {item.children!.map((child) => renderChildItem(child))}
+                {children.map((child) => renderChildItem(child))}
               </div>
             </div>
           )}
@@ -151,24 +175,25 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
           {/* 移动端展开菜单 */}
           {isMobile && isExpanded && (
             <div className="ml-4 mt-2 space-y-1">
-              {item.children!.map((child) => renderChildItem(child, true))}
+              {children.map((child) => renderChildItem(child, true))}
             </div>
           )}
         </div>
       )
     }
 
+    // 外部链接使用 <a> 标签
+    if (item.external) {
+      return (
+        <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer">
+          {buttonContent}
+        </a>
+      )
+    }
+
     return (
       <Link key={item.name} href={item.href}>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 px-4 py-2 rounded-lg transition-all duration-200 font-medium"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <IconComponent className="w-4 h-4" />
-          <span>{item.name}</span>
-        </Button>
+        {buttonContent}
       </Link>
     )
   }

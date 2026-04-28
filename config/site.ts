@@ -86,10 +86,29 @@ export const siteConfig = {
   navigation: {
     main: [
       { name: "首页", href: "/", icon: "Home", visible: true },
-      { name: "文章", href: "/articles", icon: "FileText", visible: true },
-      { name: "分类", href: "/categories", icon: "Folder", visible: true },
-      { name: "标签", href: "/tags", icon: "Tag", visible: true },
+      {
+        name: "文章",
+        href: "/articles",
+        icon: "FileText",
+        visible: true,
+        children: [
+          { name: "所有文章", href: "/articles", icon: "FileText", visible: true },
+          { name: "分类浏览", href: "/categories", icon: "Folder", visible: true },
+          { name: "标签云", href: "/tags", icon: "Tag", visible: true },
+          //{ name: "搜索资源", href: "/search", icon: "Search", visible: true },
+        ],
+      },
+      {
+        name: "分类",
+        href: "/categories",
+        icon: "Folder",
+        visible: true,
+        children: "categories" as const,
+      },
+      //{ name: "标签", href: "/tags", icon: "Tag", visible: true },
       { name: "关于", href: "/about", icon: "Info", visible: true },
+      //{ name: "B站", href: "https://space.bilibili.com/", icon: "ExternalLink", visible: true, external: true },
+      //{ name: "小红书", href: "https://www.xiaohongshu.com/", icon: "ExternalLink", visible: true, external: true },
     ],
     // 导航栏配置
     config: {
@@ -131,6 +150,39 @@ export const siteConfig = {
       disclaimer: {
         line1: "声明：分享资源仅供用户交流学习与研究使用，版权归属原版权方所有",
         line2: "若无意中侵犯到您的版权利益，请联系我，第一时间给予处理！"
+      },
+      // Hero 公告轮播配置
+      announcements: [
+        {
+          id: "domain-update",
+          title: "域名已更新",
+          message: "新域名 www.lindx.top 已上线，快收藏起来！",
+          type: "info",
+          icon: "Megaphone",
+          link: null,
+        },
+        {
+          id: "disclaimer",
+          title: "版权声明",
+          message: "分享资源仅供交流学习与研究使用，版权归属原版权方所有。若无意中侵犯到您的版权利益，请联系我，第一时间给予处理！",
+          type: "warning",
+          icon: "ShieldAlert",
+          link: null,
+        },
+        {
+          id: "new-content",
+          title: "新内容上线",
+          message: "大量视频后期资源和三维素材已更新，欢迎浏览！",
+          type: "success",
+          icon: "Sparkles",
+          link: "/articles",
+        },
+      ],
+      heroCarousel: {
+        intervalMs: 3000,
+        pauseOnHover: true,
+        showDots: true,
+        minHeight: 120, // px，统一内容区最小高度，防止切换时页面跳动
       },
       featuredCount: 30, // 首页显示的文章数量
       pagination: {
@@ -361,6 +413,34 @@ export const siteConfig = {
 
 // 类型定义
 export type SiteConfig = typeof siteConfig
+
+// 公告轮播项类型
+export interface AnnouncementItem {
+  id: string
+  title: string
+  message: string
+  type: 'info' | 'success' | 'warning' | 'tip'
+  icon: string
+  link: string | null
+}
+
+// 导航项类型
+export interface NavItem {
+  name: string
+  href: string
+  icon: string
+  visible: boolean
+  external?: boolean
+  children?: NavItem[] | "categories"
+}
+
+// 轮播配置类型
+export interface HeroCarouselConfig {
+  intervalMs: number
+  pauseOnHover: boolean
+  showDots: boolean
+  minHeight: number
+}
 
 // 分类筛选器配置类型
 export interface CategoryFilterConfig {

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { getDatabase, getCategories } from "@/lib/notion"
 
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
+import HeroAnnouncement from "@/components/HeroAnnouncement"
 import HomePagination from "@/components/HomePagination"
 import HomeCategoryFilter from "@/components/HomeCategoryFilter"
 import ArticleCardSkeleton from "@/components/ArticleCardSkeleton"
@@ -78,21 +79,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="relative w-full px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-6">
-              <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-white/30 text-sm text-blue-600 mb-4">
+              <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-white/30 text-sm text-blue-600">
                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                博主正在后台更新中...
+                {siteConfig.notifications.banner.message}
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
               {siteConfig.pages.home.title}
-              <br />
-              <span className="text-2xl md:text-3xl font-normal text-gray-600">{siteConfig.pages.home.subtitle}</span>
             </h1>
-            <p className="text-lg md:text-lg mb-8 text-gray-600 max-w-2xl mx-auto">
-              {siteConfig.pages.home.disclaimer.line1}
-              <br />
-              {siteConfig.pages.home.disclaimer.line2}
-            </p>
+            <HeroAnnouncement />
           </div>
         </div>
       </section>
