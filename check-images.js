@@ -1,10 +1,22 @@
 const { Client } = require('@notionhq/client');
+require("dotenv").config({ path: ".env.local" });
+
+const NOTION_API_KEY = process.env.NOTION_API_KEY;
+const DATABASE_ID = process.env.NOTION_DATABASE_ID;
+
+if (!NOTION_API_KEY) {
+    console.error("错误：未设置 NOTION_API_KEY 环境变量");
+    process.exit(1);
+}
+
+if (!DATABASE_ID) {
+    console.error("错误：未设置 NOTION_DATABASE_ID 环境变量");
+    process.exit(1);
+}
 
 const notion = new Client({
-    auth: process.env.NOTION_API_KEY || "secret_2oBA394pDpOFapIF1UTyoyj1hIBhNeSYit3LDq4O1l2",
+    auth: NOTION_API_KEY,
 });
-
-const DATABASE_ID = process.env.NOTION_DATABASE_ID || "10e560f6a07b8088809cede1dad50457";
 
 async function checkImages() {
     try {
