@@ -11,7 +11,6 @@ import {
   Shield,
   Users,
   FileText,
-  Heart,
   Search
 } from "lucide-react"
 import { BilibiliIcon, XiaohongshuIcon } from "@/components/SocialIcons"
@@ -210,17 +209,6 @@ export default async function AboutPage() {
                 </div>
               </CardContent>
             </Card>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 text-muted-foreground mb-4">
-              <Heart className="w-5 h-5 text-red-500" />
-              <span>Made with love for the creative community</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              © {siteConfig.footer.copyright.year} {siteConfig.footer.copyright.owner}. {siteConfig.footer.copyright.statement}
-            </p>
           </div>
         </div>
       </main>
