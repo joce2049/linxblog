@@ -1,4 +1,5 @@
 import { getDatabase, getCategories } from "@/lib/notion"
+import { supabase } from "@/lib/supabase"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -70,6 +71,26 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
     filteredArticles = filteredArticles.filter((article: Article) => article.tags.includes(tag))
   }
 
+  // popular 排序：SSR 阶段从 Supabase 批量拉真实浏览量,覆盖 Notion 评分字段
+  // 仅在 sort=popular 时调用,避免拖慢其他排序模式
+  if (sort === 'popular' && supabase) {
+    const ids = filteredArticles.map((a: Article) => a.id)
+    const { data: stats, error } = await supabase
+      .from('article_stats')
+      .select('article_id, views')
+      .in('article_id', ids)
+
+    if (error) {
+      console.warn('⚠️ Failed to fetch article_stats for popular sort, falling back to Notion field:', error.message)
+    } else if (stats) {
+      const viewsMap = new Map<string, number>(stats.map((s: { article_id: string; views: number }) => [s.article_id, s.views]))
+      filteredArticles = filteredArticles.map((a: Article) => ({
+        ...a,
+        views: viewsMap.get(a.id) ?? 0,
+      }))
+    }
+  }
+
   // 根据排序选项排序
   if (sort === 'newest') {
     filteredArticles.sort((a: Article, b: Article) => new Date(b.lastEditedTime || b.date).getTime() - new Date(a.lastEditedTime || a.date).getTime())
@@ -87,15 +108,15 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
   const currentArticles = filteredArticles.slice(startIndex, endIndex)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background">
       <ConfigurableNavigation categories={categories} />
 
       <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="max-w-none mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">所有资源</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold text-foreground mb-2">所有资源</h1>
+            <p className="text-muted-foreground">
               发现 {filteredArticles.length} 个优质资源
               {category && ` • 分类：${category}`}
               {tag && ` • 标签：${tag}`}
@@ -114,7 +135,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
 
             {/* 排序选择器 */}
             <div className="w-full lg:w-auto">
-              <h3 className="text-sm font-semibold text-gray-800 mb-3">排序方式</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-3">排序方式</h3>
               <SortSelector currentSort={sort} />
             </div>
           </div>
@@ -130,7 +151,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
             {currentArticles.length > 0 ? (
               currentArticles.map((article: Article) => (
                 <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
-                  <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
+                  <Card className="bg-card border border-border card-hover flex flex-col gap-0 py-0 px-0 cursor-pointer overflow-hidden group rounded-xl">
                     <div className="relative overflow-hidden">
                       {article.image && (
                         <UnifiedImage
@@ -143,10 +164,10 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                     </div>
                     <CardContent className="p-0">
                       <div className="p-5">
-                        <h3 className="font-semibold text-lg mb-3 line-clamp-2 text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                        <h3 className="font-semibold text-lg mb-3 line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight">
                           {article.title}
                         </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2 leading-relaxed">
                           {article.description}
                         </p>
 
@@ -155,7 +176,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                             <Badge
                               key={tag}
                               variant="secondary"
-                              className="text-xs px-2 py-1 bg-blue-50 text-blue-600 border-0 rounded-md"
+                              className="text-xs px-2 py-1 bg-primary/10 text-primary border-0 rounded-md"
                             >
                               {tag}
                             </Badge>
@@ -174,7 +195,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                 </Link>
               ))
             ) : (
-              <div className="col-span-full text-center py-12 text-gray-500">
+              <div className="col-span-full text-center py-12 text-muted-foreground">
                 没有找到相关资源
               </div>
             )}
