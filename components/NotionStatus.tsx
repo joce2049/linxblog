@@ -97,7 +97,7 @@ export default function NotionStatus({ hasApiKey, hasDatabaseId, databaseId, isC
                             href="https://www.notion.so/my-integrations"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-500 hover:underline inline-flex items-center gap-1"
+                            className="text-primary hover:underline inline-flex items-center gap-1"
                           >
                             Notion 集成页面 <ExternalLink className="h-3 w-3" />
                           </a>

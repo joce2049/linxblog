@@ -2,50 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS 变量 */
+/*
+ * 主题 token（亮 / 暗）由 components/ThemeStyleInjector.tsx 在 SSR 阶段
+ * 注入到 <head>，源自 config/theme.ts。本文件不再硬编码颜色 token。
+ *
+ * 修改配色：编辑 config/theme.ts。
+ */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  /* 非主题相关的全局变量 */
   --radius: 0.5rem;
-}
-
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
 }
 
 /* 字体变量 */
@@ -75,76 +40,192 @@
     width: 8px;
     height: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: hsl(var(--muted));
   }
-  
+
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: hsl(var(--muted-foreground) / 0.3);
     border-radius: 4px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: hsl(var(--muted-foreground) / 0.6);
   }
-  
-  /* 选择文本样式 */
+
+  /* 选择文本样式 — 深蓝主色 */
   ::selection {
-    background: #3b82f6;
-    color: white;
+    background: var(--brand-accent);
+    color: #FFFFFF;
   }
-  
+
   ::-moz-selection {
-    background: #3b82f6;
-    color: white;
+    background: var(--brand-accent);
+    color: #FFFFFF;
   }
 }
 
 /* 组件样式 */
 @layer components {
-  /* 卡片悬停效果 */
+  /* 卡片悬停 — 扁平为主，hover 时顶边 1px 电光蓝高光（铂金质感） */
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-blue-100/50;
+    @apply transition-all duration-200;
+    position: relative;
   }
-  
+  .card-hover::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--highlight-line);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  .card-hover:hover {
+    border-color: hsl(var(--primary) / 0.55);
+    transform: translateY(-1px);
+  }
+  .card-hover:hover::after {
+    opacity: 1;
+  }
+  .dark .card-hover:hover {
+    border-color: hsl(var(--primary) / 0.5);
+  }
+
   /* 按钮悬停效果 */
   .btn-hover {
     @apply transition-all duration-200 hover:scale-105 active:scale-95;
   }
-  
-  /* 渐变背景 */
+
+  /* 品牌渐变 — 铂金 + 电光蓝 */
   .gradient-bg {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-brand);
   }
-  
+
   .gradient-bg-blue {
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    background: var(--gradient-tech);
   }
-  
+
   .gradient-bg-purple {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: var(--gradient-platinum);
   }
-  
-  /* 玻璃拟态效果 */
+
+  /* 玻璃拟态 — 半透明 + 模糊，带 1px 顶边铂金高光 */
   .glass {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    background: rgba(245, 247, 250, 0.72);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border: 1px solid hsl(var(--border));
+    position: relative;
   }
-  
+
+  .dark .glass {
+    background: rgba(11, 15, 25, 0.82);
+    border: 1px solid hsl(var(--border));
+  }
+
   .glass-dark {
-    @apply bg-gray-900/80 backdrop-blur-sm border border-gray-700/20;
+    background: rgba(11, 15, 25, 0.82);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border: 1px solid hsl(var(--border));
   }
-  
-  /* 文本渐变 */
+
+  /* 文本渐变 — 铂金 → 电光蓝 */
   .text-gradient {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+    background: var(--gradient-platinum-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
-  
+
   /* 边框渐变 */
   .border-gradient {
     border: 2px solid transparent;
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(135deg, #3b82f6, #8b5cf6) border-box;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                var(--gradient-tech) border-box;
+  }
+
+  /* 1px 金属高光线 — 用于 nav 底边、组件内分隔等 */
+  .metallic-edge {
+    position: relative;
+  }
+  .metallic-edge::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--highlight-line-soft);
+    pointer-events: none;
+  }
+
+  /* === 品牌 Logo 工具类 === */
+  /* Logo 色块：深 slate → 中 slate → 浅 slate（铂金渐变），含内层斜光 */
+  .brand-logo-mark {
+    background: var(--gradient-brand);
+    color: #FFFFFF;
+    transition: filter 0.25s ease, transform 0.25s ease;
+    position: relative;
+  }
+  .brand-logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .brand-logo-mark:hover {
+    filter: brightness(1.1);
+  }
+
+  /* 用于品牌名文字渐变（铂金光泽，深 → 中 → 次中） */
+  .brand-logo-text {
+    background: var(--gradient-platinum-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    transition: filter 0.25s ease;
+  }
+  .brand-logo-text:hover {
+    filter: brightness(1.15);
+  }
+
+  /* === 次强调色 — 装饰用暖金（Amber Accent，非状态色） ===
+   * 使用规则见 design-system/MASTER.md §1.6
+   * 严禁滥用：单页累计面积 ≤ 2%，仅作点睛之笔
+   */
+
+  /* 实色版小 badge — NYT 风「精选/置顶」点睛 */
+  .badge-warm {
+    background: hsl(var(--accent-warm-bg));
+    color: hsl(var(--accent-warm));
+    border: 1px solid hsl(var(--accent-warm) / 0.25);
+  }
+
+  /* 半透明版 — 文章卡内 tag 的"top1 热度"档 */
+  .badge-warm-soft {
+    background: hsl(var(--accent-warm) / 0.12);
+    color: hsl(var(--accent-warm));
+  }
+
+  /* 单纯文字色 — 替代 primary 用于极少量"高光"文字 */
+  .text-warm {
+    color: hsl(var(--accent-warm));
+  }
+
+  /* 1px 暖金强调线 — H1 / 章节标题底边点缀 */
+  .underline-warm {
+    border-bottom: 1px solid hsl(var(--accent-warm) / 0.4);
   }
 }
 
@@ -297,24 +378,18 @@
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
   
-  /* 阴影系统 */
-  .shadow-soft {
-    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
-  }
-  
-  .shadow-medium {
-    box-shadow: 0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-  
+  /* 阴影系统 — 扁平化模式下置空（保留类名兼容旧代码） */
+  .shadow-soft,
+  .shadow-medium,
   .shadow-strong {
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
   }
   
   /* 焦点样式 */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
-  
+
   .focus-ring-white {
     @apply focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800;
   }
@@ -324,14 +399,6 @@
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-  }
-  
-  .dark .glass {
-    @apply bg-gray-900/80 border-gray-700/20;
-  }
-  
-  .dark .shadow-soft {
-    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.3), 0 10px 20px -2px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -355,9 +422,9 @@
 /* 高对比度模式 */
 @media (prefers-contrast: high) {
   .card-hover:hover {
-    @apply border-2 border-blue-600;
+    @apply border-2 border-primary;
   }
-  
+
   .btn-hover:hover {
     @apply border-2 border-current;
   }

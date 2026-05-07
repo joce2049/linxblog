@@ -9,14 +9,11 @@ export default function BackToTop() {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true)
-      } else {
-        setIsVisible(false)
-      }
+      setIsVisible(window.pageYOffset > 300)
     }
 
-    window.addEventListener('scroll', toggleVisibility)
+    window.addEventListener('scroll', toggleVisibility, { passive: true })
+    toggleVisibility()
     return () => window.removeEventListener('scroll', toggleVisibility)
   }, [])
 
@@ -32,10 +29,10 @@ export default function BackToTop() {
   return (
     <Button
       onClick={scrollToTop}
-      className="fixed bottom-8 right-8 w-12 h-12 rounded-full shadow-lg bg-white/90 backdrop-blur-sm border border-gray-200 hover:bg-white hover:shadow-xl transition-all duration-300 z-40"
+      className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-card/90 backdrop-blur-sm border border-border hover:bg-card transition-all duration-300 z-40"
       size="icon"
     >
-      <ChevronUp className="w-5 h-5 text-gray-700" />
+      <ChevronUp className="w-5 h-5 text-foreground/80" />
     </Button>
   )
 }

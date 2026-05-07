@@ -6,26 +6,42 @@ export default function ReadingProgressBar() {
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
+    let rafId: number | null = null
+
     const updateProgress = () => {
-      const scrollTop = window.scrollY
+      rafId = null
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollPercent = scrollTop / docHeight
+      if (docHeight <= 0) return
+      const scrollPercent = window.scrollY / docHeight
       setProgress(Math.min(scrollPercent * 100, 100))
     }
 
-    window.addEventListener('scroll', updateProgress)
-    updateProgress() // 初始化
+    const onScroll = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(updateProgress)
+      }
+    }
 
-    return () => window.removeEventListener('scroll', updateProgress)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    updateProgress()
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   if (progress === 0) return null
 
   return (
-    <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
-      <div 
-        className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-150 ease-out"
-        style={{ width: `${progress}%` }}
+    <div className="fixed top-0 left-0 w-full h-1 z-50" style={{ background: 'hsl(var(--muted) / 0.4)' }}>
+      <div
+        className="h-full transition-all duration-150 ease-out"
+        style={{
+          width: `${progress}%`,
+          background: 'var(--gradient-progress)',
+          boxShadow: '0 0 8px rgba(46, 82, 122, 0.35)'
+        }}
       />
     </div>
   )

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import type { Metadata } from "next"
 import { getDatabase, getCategories } from "@/lib/notion"
 import { getFullPageContent } from "@/lib/notion-content"
 import { Badge } from "@/components/ui/badge"
@@ -8,7 +9,6 @@ import { Calendar, Eye, Heart, MessageCircle } from "lucide-react"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
-import DynamicSEO from "@/components/DynamicSEO"
 import StructuredData from "@/components/StructuredData"
 import { generateArticleUrl } from "@/lib/utils"
 import nextDynamic from 'next/dynamic'
@@ -54,6 +54,47 @@ interface ArticlePageProps {
   }
 }
 
+// 通过 slug 查找文章：UUID/32hex → 精确标题 → 清理后标题
+function findArticleBySlug(articles: Article[], slug: string): Article | undefined {
+  const decoded = decodeURIComponent(slug)
+  return articles.find((p) => {
+    if (slug.match(/^([a-f0-9]{32}|[a-f0-9-]{36})$/i)) {
+      return p.id.replace(/-/g, '') === slug.replace(/-/g, '')
+    }
+    if (p.title === decoded) return true
+    const re = /[^a-z0-9\u4e00-\u9fa5]/gi
+    const cleanSlug = decoded.replace(re, '').toLowerCase()
+    const cleanTitle = p.title.replace(re, '').toLowerCase()
+    return cleanSlug === cleanTitle
+  })
+}
+
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  const articles = (await getDatabase()) as unknown as Article[]
+  const article = findArticleBySlug(articles, params.slug)
+  if (!article) return {}
+
+  const ogImages = article.image ? [{ url: article.image }] : undefined
+  return {
+    title: article.title,
+    description: article.description,
+    keywords: article.tags,
+    openGraph: {
+      title: article.title,
+      description: article.description,
+      type: 'article',
+      images: ogImages,
+      publishedTime: article.date,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.description,
+      images: article.image ? [article.image] : undefined,
+    },
+  }
+}
+
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const [rawArticles, rawCategories] = await Promise.all([
     getDatabase(),
@@ -64,35 +105,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const articles = rawArticles as unknown as Article[]
   const categories = rawCategories || []
 
-  // 查找文章：尝试多种匹配方式
-  const decodedSlug = decodeURIComponent(params.slug)
-
-  const article = articles.find((p) => {
-    // 方式1: 如果 slug 是 ID (32位 hex 或 UUID)
-    if (params.slug.match(/^[a-f0-9]{32}|[a-f0-9-]{36}$/i)) {
-      return p.id.replace(/-/g, "") === params.slug.replace(/-/g, "")
-    }
-
-    // 方式2: 精确匹配标题 (处理 URL 编码)
-    if (p.title === decodedSlug) {
-      return true
-    }
-
-    // 方式3: 清理后的标题匹配（移除特殊字符）
-    const cleanSlug = decodedSlug.replace(/[^a-z0-9\u4e00-\u9fa5]/gi, '').toLowerCase()
-    const cleanTitle = p.title.replace(/[^a-z0-9\u4e00-\u9fa5]/gi, '').toLowerCase()
-
-    if (cleanSlug === cleanTitle) {
-      return true
-    }
-
-    // 方式4: 模糊匹配（标题包含slug或slug包含标题）
-    if (cleanTitle.includes(cleanSlug) || cleanSlug.includes(cleanTitle)) {
-      return true
-    }
-
-    return false
-  })
+  const article = findArticleBySlug(articles, params.slug)
 
   if (!article) {
     notFound()
@@ -113,13 +126,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <>
-      <DynamicSEO
-        title={article.title}
-        description={article.description}
-        keywords={article.tags}
-        image={article.image || undefined}
-      />
-      <StructuredData
+<StructuredData
         type="article"
         data={{
           "@context": "https://schema.org",
@@ -144,7 +151,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen bg-background">
         {/* 导航栏 */}
         <ConfigurableNavigation categories={categories} />
 
@@ -167,7 +174,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <div className="container max-w-6xl mx-auto px-4 pb-12">
                 <div className="space-y-4">
                   <div className="flex flex-wrap gap-2">
-                    <Badge className="bg-blue-600 hover:bg-blue-700 text-white border-0">
+                    <Badge className="bg-primary hover:bg-primary/90 text-white border-0">
                       {article.category}
                     </Badge>
                     {article.tags.slice(0, 3).map((tag: string) => (
@@ -204,11 +211,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* 无封面图的简洁头部 */}
         {!article.image && (
-          <div className="bg-white border-b">
+          <div className="bg-card">
             <div className="container max-w-6xl mx-auto px-4 py-12">
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  <Badge className="bg-blue-600 hover:bg-blue-700 text-white border-0">
+                  <Badge className="bg-primary hover:bg-primary/90 text-white border-0">
                     {article.category}
                   </Badge>
                   {article.tags.map((tag: string) => (
@@ -218,13 +225,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   ))}
                 </div>
 
-                <h1 className="text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900">
+                <h1 className="text-3xl md:text-4xl lg:text-4xl font-bold text-foreground">
                   {article.title}
                 </h1>
 
-                <p className="text-lg text-gray-600">{article.description}</p>
+                <p className="text-lg text-muted-foreground">{article.description}</p>
 
-                <div className="flex flex-wrap items-center gap-4 text-gray-500 text-sm pt-4">
+                <div className="flex flex-wrap items-center gap-4 text-muted-foreground text-sm pt-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
                     {new Date(article.date).toLocaleDateString('zh-CN')}
@@ -243,26 +250,26 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {/* 文章内容主体 - 宽屏显示 */}
         <main className="container max-w-6xl mx-auto px-4 py-8 lg:py-12">
           {/* 文章内容 */}
-          <article className="bg-white rounded-2xl shadow-md p-6 md:p-10 lg:p-14 mb-12">
+          <article className="bg-card border border-border rounded-2xl p-6 md:p-10 lg:p-14 mb-12">
             {/* 文章属性信息 */}
-            <div className="mb-12 pb-8 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">📋 资源信息</h3>
+            <div className="mb-12 pb-8 border-b border-border/50">
+              <h3 className="text-lg font-semibold text-foreground mb-4">📋 资源信息</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* 期数 */}
                 {article.description && (
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-16 text-sm font-medium text-gray-500">期数</div>
-                    <div className="flex-1 text-gray-900 font-medium">{article.description}</div>
+                    <div className="flex-shrink-0 w-16 text-sm font-medium text-muted-foreground">期数</div>
+                    <div className="flex-1 text-foreground font-medium">{article.description}</div>
                   </div>
                 )}
 
                 {/* 标签 */}
                 {article.tags && article.tags.length > 0 && (
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-16 text-sm font-medium text-gray-500">标签</div>
+                    <div className="flex-shrink-0 w-16 text-sm font-medium text-muted-foreground">标签</div>
                     <div className="flex-1 flex flex-wrap gap-2">
                       {article.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="bg-purple-100 text-purple-700 hover:bg-purple-200">
+                        <Badge key={tag} variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-0">
                           {tag}
                         </Badge>
                       ))}
@@ -273,10 +280,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {/* 格式 */}
                 {article.format && article.format.length > 0 && (
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-16 text-sm font-medium text-gray-500">格式</div>
+                    <div className="flex-shrink-0 w-16 text-sm font-medium text-muted-foreground">格式</div>
                     <div className="flex-1 flex flex-wrap gap-2">
                       {article.format.map((fmt) => (
-                        <Badge key={fmt} className="bg-orange-100 text-orange-700 hover:bg-orange-200 border-0">
+                        <Badge key={fmt} className="bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 border-0">
                           {fmt}
                         </Badge>
                       ))}
@@ -287,13 +294,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 {/* 网盘链接 */}
                 {article.url && article.url !== '#' && (
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-16 text-sm font-medium text-gray-500">网盘1</div>
+                    <div className="flex-shrink-0 w-16 text-sm font-medium text-muted-foreground">网盘1</div>
                     <div className="flex-1">
                       <a
                         href={article.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 underline break-all"
+                        className="text-primary hover:text-primary/80 underline break-all"
                       >
                         {article.url}
                       </a>
@@ -323,7 +330,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               "
               dangerouslySetInnerHTML={{
                 __html: htmlContent || `
-                  <div class="text-center py-16 text-gray-500">
+                  <div class="text-center py-16 text-muted-foreground">
                     <p class="text-xl mb-3 font-medium">📝 暂无文章内容</p>
                     <p class="text-base">${article.description || '该文章还没有添加内容'}</p>
                   </div>
@@ -332,7 +339,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             />
 
             {/* 文章底部操作栏 */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
+            <div className="mt-12 pt-8">
               <ArticleLikeActions articleId={article.id} initialComments={article.comments} />
             </div>
           </article>
@@ -340,7 +347,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           {/* 相关推荐 */}
           {relatedArticles.length > 0 && (
             <section className="mb-12">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">相关推荐</h2>
+              <h2 className="text-xl font-bold text-foreground mb-6">相关推荐</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {relatedArticles.map((relatedArticle) => (
                   <Link
@@ -348,7 +355,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                     href={generateArticleUrl(relatedArticle.title, relatedArticle.id)}
                     prefetch={true}
                   >
-                    <Card className="bg-white hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl h-full">
+                    <Card className="bg-card border border-border card-hover transition-all duration-200 cursor-pointer overflow-hidden group rounded-xl h-full">
                       {relatedArticle.image && (
                         <div className="relative overflow-hidden aspect-video">
                           <UnifiedImage
@@ -360,13 +367,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                         </div>
                       )}
                       <CardContent className="p-4">
-                        <h3 className="font-semibold text-base mb-2 line-clamp-2 text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                        <h3 className="font-semibold text-base mb-2 line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight">
                           {relatedArticle.title}
                         </h3>
-                        <p className="text-gray-600 text-sm line-clamp-2 mb-3 leading-relaxed">
+                        <p className="text-muted-foreground text-sm line-clamp-2 mb-3 leading-relaxed">
                           {relatedArticle.description}
                         </p>
-                        <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <ArticleStatsDisplay
                             articleId={relatedArticle.id}
                             initialViews={0}

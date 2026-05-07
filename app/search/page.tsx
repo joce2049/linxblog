@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -42,6 +42,7 @@ interface SearchPageProps {
 }
 
 export default function SearchPage({ searchParams }: SearchPageProps) {
+  const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([])
   const [categories, setCategories] = useState<Array<{ name: string; color: string }>>([])
   const [searchQuery, setSearchQuery] = useState(searchParams.q || '')
@@ -195,12 +196,12 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      const url = new URL(window.location.href)
-      url.searchParams.set('q', searchQuery.trim())
-      if (selectedCategory) url.searchParams.set('category', selectedCategory)
-      if (selectedTag) url.searchParams.set('tag', selectedTag)
-      if (sortBy !== 'relevance') url.searchParams.set('sort', sortBy)
-      window.history.pushState({}, '', url.toString())
+      const params = new URLSearchParams()
+      params.set('q', searchQuery.trim())
+      if (selectedCategory) params.set('category', selectedCategory)
+      if (selectedTag) params.set('tag', selectedTag)
+      if (sortBy !== 'relevance') params.set('sort', sortBy)
+      router.replace(`/search?${params.toString()}`, { scroll: false })
     }
   }
 
@@ -231,11 +232,10 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     setSelectedCategory('')
     setSelectedTag('')
     setSortBy('relevance')
-    const url = new URL(window.location.href)
-    url.searchParams.delete('category')
-    url.searchParams.delete('tag')
-    url.searchParams.delete('sort')
-    window.history.pushState({}, '', url.toString())
+    const params = new URLSearchParams()
+    if (searchQuery.trim()) params.set('q', searchQuery.trim())
+    const qs = params.toString()
+    router.replace(qs ? `/search?${qs}` : '/search', { scroll: false })
   }
 
   // 判断是否有搜索或筛选条件
@@ -252,12 +252,12 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen bg-background">
         <ConfigurableNavigation categories={categories} />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">正在加载...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">正在加载...</p>
           </div>
         </div>
       </div>
@@ -265,7 +265,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background">
       <ConfigurableNavigation categories={categories} />
 
       <main className="w-full px-4 sm:px-6 lg:px-8 py-12">
@@ -273,29 +273,29 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
           {/* Search Header */}
           <div className="mb-12 text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent mb-4">搜索资源</h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {searchQuery ? `搜索 "${searchQuery}" 的结果` : '输入关键词，探索精选资源库'}
             </p>
           </div>
 
           {/* Search Form */}
-          <div className="bg-white/90 backdrop-blur-md border-0 rounded-2xl mb-8 shadow-2xl shadow-blue-500/10">
+          <div className="bg-card/90 backdrop-blur-md border-0 rounded-2xl mb-8">
             <div className="p-8">
               <form onSubmit={handleSearch} className="space-y-6">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1 relative group">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-blue-500 transition-colors duration-200" />
+                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground/70 w-5 h-5 group-focus-within:text-primary transition-colors duration-200" />
                     <Input
                       placeholder="输入关键词搜索资源..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-12 pr-4 h-14 text-lg bg-gray-50/80 border border-blue-200/50 rounded-2xl focus:bg-white focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white focus:border-blue-400 text-gray-900 placeholder:text-gray-500 shadow-inner transition-all duration-300 font-medium"
+                      className="pl-12 pr-4 h-14 text-lg bg-muted/50 border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 focus:ring-offset-background focus:border-primary/60 text-foreground placeholder:text-muted-foreground shadow-inner transition-all duration-300 font-medium"
                     />
                   </div>
                   <Button
                     type="submit"
                     size="lg"
-                    className="px-8 h-14 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-2xl font-semibold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 active:scale-95 focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white"
+                    className="px-8 h-14 gradient-bg hover:opacity-90 text-white rounded-2xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 focus:ring-offset-background"
                   >
                     搜索
                   </Button>
@@ -307,7 +307,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                     type="button"
                     variant="outline"
                     onClick={() => setShowFilters(!showFilters)}
-                    className="flex items-center space-x-2 bg-gray-50/80 border-0 rounded-xl px-4 py-2.5 text-gray-700 hover:bg-white hover:text-gray-900 shadow-sm hover:shadow-md transition-all duration-200 font-medium focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white"
+                    className="flex items-center space-x-2 bg-muted/50 border-0 rounded-xl px-4 py-2.5 text-foreground/80 hover:bg-card hover:text-foreground transition-all duration-200 font-medium focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 focus:ring-offset-background"
                   >
                     <Filter className="w-4 h-4" />
                     <span>筛选选项</span>
@@ -318,7 +318,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                       type="button"
                       variant="ghost"
                       onClick={clearFilters}
-                      className="text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl px-3 py-2 transition-all duration-200 font-medium"
+                      className="text-muted-foreground hover:text-red-600 hover:bg-red-50 rounded-xl px-3 py-2 transition-all duration-200 font-medium"
                     >
                       <X className="w-4 h-4 mr-1" />
                       清除筛选
@@ -328,13 +328,13 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
 
                 {/* Filters */}
                 {showFilters && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-gray-100">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-border/60">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-800 mb-3">分类</label>
+                      <label className="block text-sm font-semibold text-foreground mb-3">分类</label>
                       <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50/80 border-0 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white focus:bg-white shadow-sm hover:shadow-md transition-all duration-200 font-medium cursor-pointer"
+                        className="w-full px-4 py-3 bg-muted/50 border-0 rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 focus:ring-offset-background focus:bg-card transition-all duration-200 font-medium cursor-pointer"
                       >
                         <option value="">全部分类</option>
                         {categories.map((category) => (
@@ -346,11 +346,11 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-800 mb-3">标签</label>
+                      <label className="block text-sm font-semibold text-foreground mb-3">标签</label>
                       <select
                         value={selectedTag}
                         onChange={(e) => setSelectedTag(e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50/80 border-0 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white focus:bg-white shadow-sm hover:shadow-md transition-all duration-200 font-medium cursor-pointer"
+                        className="w-full px-4 py-3 bg-muted/50 border-0 rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 focus:ring-offset-background focus:bg-card transition-all duration-200 font-medium cursor-pointer"
                       >
                         <option value="">全部标签</option>
                         {Array.from(new Set(articles.flatMap(article => article.tags))).map((tag) => (
@@ -362,11 +362,11 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-800 mb-3">排序</label>
+                      <label className="block text-sm font-semibold text-foreground mb-3">排序</label>
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50/80 border-0 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-white focus:bg-white shadow-sm hover:shadow-md transition-all duration-200 font-medium cursor-pointer"
+                        className="w-full px-4 py-3 bg-muted/50 border-0 rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 focus:ring-offset-background focus:bg-card transition-all duration-200 font-medium cursor-pointer"
                       >
                         <option value="relevance">相关性</option>
                         <option value="newest">最新</option>
@@ -383,34 +383,34 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
           {/* Search Results */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                {!hasSearchOrFilter && <Sparkles className="w-6 h-6 text-blue-600" />}
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                {!hasSearchOrFilter && <Sparkles className="w-6 h-6 text-primary" />}
                 {hasSearchOrFilter ? '搜索结果' : '推荐'}
               </h2>
 
               {displayArticles.length > 0 && (
-                <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-xl font-medium">
+                <div className="bg-primary/10 text-primary px-4 py-2 rounded-xl font-medium">
                   {hasSearchOrFilter ? `找到 ${filteredArticles.length} 个相关资源` : `为您推荐 ${randomRecommendations.length} 个精选资源`}
                 </div>
               )}
             </div>
 
             {displayArticles.length === 0 ? (
-              <div className="bg-white/90 backdrop-blur-md border-0 rounded-2xl shadow-xl shadow-gray-500/10">
+              <div className="bg-card/90 backdrop-blur-md border-0 rounded-2xl shadow-gray-500/10">
                 <div className="p-16 text-center">
                   <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Search className="w-10 h-10 text-gray-400" />
+                    <Search className="w-10 h-10 text-muted-foreground/70" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">未找到相关资源</h3>
-                  <p className="text-gray-600 mb-8 text-lg">
+                  <h3 className="text-2xl font-bold text-foreground mb-3">未找到相关资源</h3>
+                  <p className="text-muted-foreground mb-8 text-lg">
                     {searchQuery ? `没有找到与 "${searchQuery}" 相关的资源` : '请输入搜索关键词'}
                   </p>
-                  <div className="bg-gray-50 rounded-2xl p-6 max-w-md mx-auto">
-                    <p className="text-sm font-semibold text-gray-700 mb-3">搜索建议：</p>
-                    <ul className="text-sm text-gray-600 space-y-2 text-left">
-                      <li className="flex items-center"><span className="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>尝试使用更简单的关键词</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>检查拼写是否正确</li>
-                      <li className="flex items-center"><span className="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>使用分类或标签筛选</li>
+                  <div className="bg-muted/50 rounded-2xl p-6 max-w-md mx-auto">
+                    <p className="text-sm font-semibold text-foreground/80 mb-3">搜索建议：</p>
+                    <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                      <li className="flex items-center"><span className="w-2 h-2 bg-primary/60 rounded-full mr-3"></span>尝试使用更简单的关键词</li>
+                      <li className="flex items-center"><span className="w-2 h-2 bg-primary/60 rounded-full mr-3"></span>检查拼写是否正确</li>
+                      <li className="flex items-center"><span className="w-2 h-2 bg-primary/60 rounded-full mr-3"></span>使用分类或标签筛选</li>
                     </ul>
                   </div>
                 </div>
@@ -419,7 +419,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
                 {displayArticles.map((article) => (
                   <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
-                    <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
+                    <Card className="bg-card border border-border card-hover flex flex-col gap-0 py-0 px-0 cursor-pointer overflow-hidden group rounded-xl">
                       <div className="relative overflow-hidden">
                         {article.image && (
                           <UnifiedImage
@@ -433,13 +433,13 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                       <CardContent className="p-0">
                         <div className="p-5">
                           <h3
-                            className="font-semibold text-lg mb-3 line-clamp-2 text-gray-900 group-hover:text-blue-600 transition-colors leading-tight"
+                            className="font-semibold text-lg mb-3 line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight"
                             dangerouslySetInnerHTML={{
                               __html: highlightText(article.title, searchQuery)
                             }}
                           />
                           <p
-                            className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed"
+                            className="text-muted-foreground text-sm mb-4 line-clamp-2 leading-relaxed"
                             dangerouslySetInnerHTML={{
                               __html: highlightText(article.description, searchQuery)
                             }}
@@ -450,7 +450,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                               <Badge
                                 key={t}
                                 variant="secondary"
-                                className="text-xs px-2 py-1 bg-blue-50 text-blue-600 border-0 rounded-md"
+                                className="text-xs px-2 py-1 bg-primary/10 text-primary border-0 rounded-md"
                               >
                                 {t}
                               </Badge>

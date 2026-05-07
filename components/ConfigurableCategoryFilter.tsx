@@ -83,10 +83,10 @@ export default function ConfigurableCategoryFilter({ categories, currentCategory
     
     if (isActive) {
       // 选中状态：蓝色主题，保持与"全部"按钮一致
-      return `${baseClasses} bg-blue-600 hover:bg-blue-700 text-white border-blue-600 shadow-sm`
+      return `${baseClasses} bg-primary hover:bg-primary/90 text-white border-primary`
     } else {
       // 未选中状态：统一的线框风格
-      return `${baseClasses} border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400`
+      return `${baseClasses} border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground hover:border-gray-400`
     }
   }
 
@@ -94,13 +94,13 @@ export default function ConfigurableCategoryFilter({ categories, currentCategory
     <div className="space-y-4">
       {/* 分类筛选器标题 */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-700">分类筛选</h3>
+        <h3 className="text-sm font-medium text-foreground/80">分类筛选</h3>
         {shouldShowExpandButton && (
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setShowAllCategories(!showAllCategories)}
-            className="text-xs text-gray-500 hover:text-gray-700"
+            className="text-xs text-muted-foreground hover:text-foreground/80"
           >
             {showAllCategories ? (
               <>
@@ -125,8 +125,8 @@ export default function ConfigurableCategoryFilter({ categories, currentCategory
             variant="outline"
             size="default"
             className={!currentCategory 
-              ? "bg-blue-600 hover:bg-blue-700 text-white border-blue-600 shadow-sm font-medium px-4 py-2" 
-              : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 font-medium px-4 py-2"
+              ? "bg-primary hover:bg-primary/90 text-white border-primary font-medium px-4 py-2" 
+              : "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground hover:border-gray-400 font-medium px-4 py-2"
             }
             onClick={() => handleCategoryChange('all')}
           >
@@ -160,7 +160,7 @@ export default function ConfigurableCategoryFilter({ categories, currentCategory
 
       {/* 展开/收起提示 */}
       {shouldShowExpandButton && !showAllCategories && (
-        <div className="text-xs text-gray-500 text-center">
+        <div className="text-xs text-muted-foreground text-center">
           还有 {visibleCategories.length - filterConfig.maxVisible} 个分类，点击展开查看
         </div>
       )}

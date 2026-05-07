@@ -1,6 +1,3 @@
-import { MessageCircle, Heart, Eye, Mail } from "lucide-react"
-import { BilibiliIcon, XiaohongshuIcon } from "@/components/SocialIcons"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { getDatabase, getCategories } from "@/lib/notion"
@@ -22,10 +19,10 @@ const ArticleStatsDisplay = nextDynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex items-center gap-4 text-sm text-gray-500">
-        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
-        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
-        <div className="h-4 w-12 bg-gray-200 animate-pulse rounded" />
+      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <div className="h-4 w-12 bg-muted animate-pulse rounded" />
+        <div className="h-4 w-12 bg-muted animate-pulse rounded" />
+        <div className="h-4 w-12 bg-muted animate-pulse rounded" />
       </div>
     )
   }
@@ -71,20 +68,20 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const currentArticles = filteredArticles.slice(startIndex, endIndex)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background">
       <ConfigurableNavigation categories={categories} />
 
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10"></div>
+        <div className="absolute inset-0 opacity-50" style={{ background: 'radial-gradient(ellipse at top, hsl(var(--primary) / 0.08), transparent 60%)' }}></div>
         <div className="relative w-full px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-6">
-              <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-white/30 text-sm text-blue-600">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+              <div className="inline-flex items-center px-4 py-2 glass rounded-full text-sm text-primary">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
                 {siteConfig.notifications.banner.message}
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-bold mb-8 brand-logo-text">
               {siteConfig.pages.home.title}
             </h1>
             <HeroAnnouncement />
@@ -97,10 +94,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">最新文章</h2>
-            <div className="text-sm text-gray-500">
+            <h2 className="text-2xl font-bold text-foreground">最新文章</h2>
+            <div className="text-sm text-muted-foreground">
               共 {filteredArticles.length} 篇文章
-              {currentCategory && <span className="text-blue-600 ml-2">• 分类：{currentCategory}</span>}
+              {currentCategory && <span className="text-primary ml-2">• 分类：{currentCategory}</span>}
             </div>
           </div>
           <HomeCategoryFilter
@@ -113,7 +110,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           {currentArticles.length > 0 ? (
             currentArticles.map((article: any) => (
               <Link key={article.id} href={generateArticleUrl(article.title, article.id)} prefetch={true}>
-                <Card className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm hover:shadow-xl hover:shadow-blue-100/50 transition-all duration-300 cursor-pointer overflow-hidden group border-0 rounded-xl">
+                <Card className="bg-card border border-border flex flex-col gap-0 py-0 px-0 card-hover cursor-pointer overflow-hidden group rounded-xl">
                   <div className="relative overflow-hidden">
                     {article.image && (
                       <UnifiedImage
@@ -126,10 +123,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   </div>
                   <CardContent className="p-0">
                     <div className="p-5">
-                      <h3 className="font-semibold text-lg mb-3 line-clamp-2 text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                      <h3 className="font-semibold text-lg mb-3 line-clamp-2 text-foreground group-hover:text-primary transition-colors leading-tight">
                         {article.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2 leading-relaxed">
                         {article.description}
                       </p>
 
@@ -138,7 +135,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                           <Badge
                             key={tag}
                             variant="secondary"
-                            className="text-xs px-2 py-1 bg-blue-50 text-blue-600 border-0 rounded-md"
+                            className="text-xs px-2 py-1 bg-primary/10 text-primary border-0 rounded-md hover:bg-primary/20"
                           >
                             {tag}
                           </Badge>
@@ -171,92 +168,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           itemsPerPage={itemsPerPage}
         />
       </main>
-
-      <footer className="bg-white/80 backdrop-blur-sm border-t border-white/30 mt-20">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">L</span>
-              </div>
-              <div>
-                <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {siteConfig.brand.name}
-                </span>
-                <div className="text-xs text-gray-500">{siteConfig.brand.tagline}</div>
-              </div>
-            </div>
-            <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
-              {siteConfig.footer.description}
-            </p>
-
-            <div className="flex justify-center space-x-4 mb-8">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                asChild
-              >
-                <a
-                  href="https://space.bilibili.com/173981850"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="哔哩哔哩"
-                >
-                  <BilibiliIcon className="w-5 h-5" />
-                </a>
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full text-gray-600 hover:bg-pink-50 hover:text-pink-600"
-                asChild
-              >
-                <a
-                  href="https://www.xiaohongshu.com/user/profile/5f70aed20000000001002f89"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="小红书"
-                >
-                  <XiaohongshuIcon className="w-5 h-5" />
-                </a>
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                asChild
-              >
-                <a
-                  href="mailto:contact@linx.com"
-                  aria-label="邮件联系"
-                >
-                  <Mail className="w-5 h-5" />
-                </a>
-              </Button>
-            </div>
-
-            <div className="flex justify-center space-x-6 text-sm text-gray-500 mb-6">
-              <Link href="/about" className="hover:text-blue-600 transition-colors">
-                关于本站
-              </Link>
-              <a href="#" className="hover:text-blue-600 transition-colors">
-                友情链接
-              </a>
-              <a href="#" className="hover:text-blue-600 transition-colors">
-                隐私政策
-              </a>
-              <a href="#" className="hover:text-blue-600 transition-colors">
-                RSS订阅
-              </a>
-            </div>
-
-            <div className="pt-6 border-t border-gray-200 text-center text-sm text-gray-500">
-              <p>&copy; {siteConfig.footer.copyright.year} {siteConfig.footer.copyright.owner}. {siteConfig.footer.copyright.statement}</p>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

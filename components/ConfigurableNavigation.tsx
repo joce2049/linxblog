@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import {
   Home,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react'
 import { siteConfig } from '@/config/site'
 import type { NavItem } from '@/config/site'
+import ThemeToggle from '@/components/ThemeToggle'
 
 interface NavigationItem extends NavItem {}
 
@@ -25,6 +27,7 @@ interface ConfigurableNavigationProps {
 }
 
 export default function ConfigurableNavigation({ categories }: ConfigurableNavigationProps) {
+  const router = useRouter()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [expandedItems, setExpandedItems] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -65,8 +68,10 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`
+    const q = searchQuery.trim()
+    if (q) {
+      setIsMobileMenuOpen(false)
+      router.push(`/search?q=${encodeURIComponent(q)}`)
     }
   }
 
@@ -77,7 +82,7 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       Folder,
       Tag,
       Info,
-      Search: FileText,
+      Search: Search,
       ExternalLink,
     }
     return iconMap[iconName] || FileText
@@ -97,15 +102,15 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       const ChildIconComponent = getIcon(child.icon)
       const className = `flex items-center space-x-2 px-4 py-2 text-sm transition-colors ${
         isMobileChild
-          ? 'text-gray-600 hover:text-blue-600'
-          : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+          ? 'text-muted-foreground hover:text-primary'
+          : 'text-foreground/80 hover:bg-accent hover:text-primary'
       }`
 
       const content = (
         <>
           <ChildIconComponent className="w-4 h-4" />
           <span>{child.name}</span>
-          {child.external && <ExternalLink className="w-3 h-3 text-gray-400" />}
+          {child.external && <ExternalLink className="w-3 h-3 text-muted-foreground/70" />}
         </>
       )
 
@@ -140,7 +145,7 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       <Button
         variant="ghost"
         size="sm"
-        className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 px-4 py-2 rounded-lg transition-all duration-200 font-medium"
+        className="flex items-center space-x-2 text-foreground/80 hover:text-primary hover:bg-accent px-4 py-2 rounded-lg transition-all duration-200 font-medium"
         onClick={() => {
           if (hasChildren) {
             toggleExpanded(item.name)
@@ -151,7 +156,7 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       >
         <IconComponent className="w-4 h-4" />
         <span>{item.name}</span>
-        {item.external && <ExternalLink className="w-3 h-3 text-gray-400" />}
+        {item.external && <ExternalLink className="w-3 h-3 text-muted-foreground/70" />}
         {hasChildren && (
           <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
         )}
@@ -165,7 +170,7 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
 
           {/* 桌面端下拉菜单 */}
           {!isMobile && (
-            <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <div className="absolute top-full left-0 mt-1 w-48 bg-card rounded-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
               <div className="py-2">
                 {children.map((child) => renderChildItem(child))}
               </div>
@@ -199,16 +204,16 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
   }
 
   return (
-    <header className="backdrop-blur-md bg-white/80 border-b border-white/20 sticky top-0 z-50">
+    <header className="glass border-b border-border sticky top-0 z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group cursor-pointer">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200 group-hover:scale-105">
-              <span className="text-white font-bold text-lg">L</span>
+            <div className="brand-logo-mark w-10 h-10 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+              <span className="font-bold text-lg">L</span>
             </div>
             <div>
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-blue-500 group-hover:to-purple-500 transition-all duration-200">
+              <span className="brand-logo-text font-bold text-xl">
                 {siteConfig.brand.name}
               </span>
               <div className="text-xs text-muted-foreground">{siteConfig.brand.tagline}</div>
@@ -222,46 +227,47 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
 
           {/* 右侧搜索栏 */}
           <div className="hidden md:flex items-center space-x-2">
-            <form onSubmit={handleSearch} className="relative group">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 group-focus-within:text-blue-500 transition-colors" />
+            <form onSubmit={handleSearch} className="relative">
               <input
                 type="text"
                 placeholder="搜索资源..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48 pl-10 pr-4 py-2 text-sm bg-white/80 backdrop-blur-sm border border-blue-200/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white focus:border-blue-400 transition-all duration-200 placeholder-gray-400 text-gray-900"
+                className="w-48 px-4 py-2 text-sm bg-card/80 backdrop-blur-sm border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors duration-200 placeholder:text-muted-foreground/70 text-foreground"
               />
             </form>
+            <ThemeToggle />
           </div>
 
-          {/* 移动端菜单按钮 */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </Button>
+          {/* 移动端右侧操作 */}
+          <div className="md:hidden flex items-center gap-1">
+            <ThemeToggle />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* 移动端导航菜单 */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-border">
             {/* 移动端搜索栏 */}
             <div className="mb-4 px-2">
               <form onSubmit={handleSearch} className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="搜索资源..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 text-sm bg-white/80 backdrop-blur-sm border border-blue-200/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 transition-all duration-200 placeholder-gray-400 text-gray-900"
+                  className="w-full px-4 py-2 text-sm bg-card/80 backdrop-blur-sm border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors duration-200 placeholder:text-muted-foreground/70 text-foreground"
                 />
               </form>
             </div>

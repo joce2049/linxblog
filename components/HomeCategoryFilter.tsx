@@ -36,7 +36,7 @@ export default function HomeCategoryFilter({
       <Button
         variant={currentCategory ? "outline" : "default"}
         size="sm"
-        className={currentCategory ? "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900" : "bg-blue-600 hover:bg-blue-700 text-white"}
+        className={currentCategory ? "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground" : "bg-primary hover:bg-primary/90 text-white"}
         onClick={() => handleCategoryChange('all')}
       >
         全部
@@ -46,7 +46,7 @@ export default function HomeCategoryFilter({
           key={categoryName}
           variant={currentCategory === categoryName ? "default" : "outline"}
           size="sm"
-          className={currentCategory === categoryName ? "bg-blue-600 hover:bg-blue-700 text-white" : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"}
+          className={currentCategory === categoryName ? "bg-primary hover:bg-primary/90 text-white" : "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"}
           onClick={() => handleCategoryChange(categoryName)}
         >
           {categoryName}

@@ -23,7 +23,7 @@ export default function ArticleActions({ title, description, url }: ArticleActio
       <Button
         variant="outline"
         onClick={handleBack}
-        className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+        className="border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
         返回

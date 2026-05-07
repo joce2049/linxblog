@@ -22,7 +22,7 @@ export default function CodeBlock({ code, language }: CodeBlockProps) {
     }
 
     return (
-        <div className="my-8 rounded-lg overflow-hidden shadow-lg border border-gray-800">
+        <div className="my-8 rounded-lg overflow-hidden border border-gray-800">
             {/* Header */}
             <div className="bg-gray-800 text-gray-300 px-4 py-2.5 flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wide">{language}</span>

@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function ArticleCardSkeleton() {
   return (
-    <div className="bg-white/80 backdrop-blur-sm flex flex-col gap-0 py-0 px-0 shadow-sm border-0 rounded-xl overflow-hidden">
+    <div className="bg-card border border-border flex flex-col gap-0 py-0 px-0 rounded-xl overflow-hidden">
       {/* 图片占位 */}
       <div className="relative overflow-hidden">
         <Skeleton className="w-full aspect-video" />
@@ -31,7 +31,7 @@ export default function ArticleCardSkeleton() {
         </div>
         
         {/* 日期占位 */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-4 pt-4">
           <Skeleton className="h-3 w-24" />
         </div>
       </div>

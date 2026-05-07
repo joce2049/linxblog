@@ -29,16 +29,16 @@ export default function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
       />
       
       {/* 面包屑导航 */}
-      <nav className={`flex items-center space-x-2 text-sm text-gray-600 ${className}`} aria-label="面包屑导航">
+      <nav className={`flex items-center space-x-2 text-sm text-muted-foreground ${className}`} aria-label="面包屑导航">
         {allItems.map((item, index) => (
           <div key={item.url} className="flex items-center">
             {index > 0 && (
-              <ChevronRight className="w-4 h-4 mx-2 text-gray-400" />
+              <ChevronRight className="w-4 h-4 mx-2 text-muted-foreground/70" />
             )}
             
             {index === allItems.length - 1 ? (
               // 当前页面
-              <span className="text-gray-900 font-medium" aria-current="page">
+              <span className="text-foreground font-medium" aria-current="page">
                 {index === 0 ? (
                   <Home className="w-4 h-4 inline mr-1" />
                 ) : null}
@@ -48,7 +48,7 @@ export default function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
               // 可点击的链接
               <Link 
                 href={item.url}
-                className="hover:text-blue-600 transition-colors flex items-center"
+                className="hover:text-primary transition-colors flex items-center"
               >
                 {index === 0 ? (
                   <Home className="w-4 h-4 inline mr-1" />

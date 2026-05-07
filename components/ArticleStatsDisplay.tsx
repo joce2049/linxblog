@@ -42,7 +42,7 @@ export default function ArticleStatsDisplay({
     }, [articleId])
 
     return (
-        <div className="flex items-center gap-4 text-gray-500 text-sm">
+        <div className="flex items-center gap-4 text-muted-foreground text-sm">
             <span className="flex items-center gap-1">
                 <Eye className="w-4 h-4" />
                 {isLoading ? initialViews : stats.views}

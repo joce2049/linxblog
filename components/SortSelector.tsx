@@ -19,13 +19,13 @@ export default function SortSelector({ currentSort }: SortSelectorProps) {
 
   return (
     <Select value={currentSort} onValueChange={handleSortChange}>
-      <SelectTrigger className="w-[180px] bg-gray-50/80 border border-blue-200/50 hover:border-blue-300 focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-2 focus:ring-offset-white text-gray-900 rounded-xl transition-all duration-200">
-        <SelectValue placeholder="选择排序方式" className="text-gray-900" />
+      <SelectTrigger className="w-[180px] bg-muted/50 border border-border hover:border-primary/60 focus:border-primary/60 focus:ring-2 focus:ring-ring/40 focus:ring-offset-2 focus:ring-offset-white text-foreground rounded-xl transition-all duration-200">
+        <SelectValue placeholder="选择排序方式" className="text-foreground" />
       </SelectTrigger>
-      <SelectContent className="bg-white border border-blue-200/50 shadow-xl shadow-blue-500/10 rounded-xl">
-        <SelectItem value="newest" className="hover:bg-blue-50 focus:bg-blue-100 cursor-pointer text-gray-900 rounded-lg mx-2 my-1 transition-colors duration-200 data-[highlighted]:bg-blue-100 data-[highlighted]:text-gray-900">最新发布</SelectItem>
-        <SelectItem value="oldest" className="hover:bg-blue-50 focus:bg-blue-100 cursor-pointer text-gray-900 rounded-lg mx-2 my-1 transition-colors duration-200 data-[highlighted]:bg-blue-100 data-[highlighted]:text-gray-900">最早发布</SelectItem>
-        <SelectItem value="popular" className="hover:bg-blue-50 focus:bg-blue-100 cursor-pointer text-gray-900 rounded-lg mx-2 my-1 transition-colors duration-200 data-[highlighted]:bg-blue-100 data-[highlighted]:text-gray-900">最受欢迎</SelectItem>
+      <SelectContent className="bg-card border border-border rounded-xl">
+        <SelectItem value="newest" className="hover:bg-accent focus:bg-primary/20 cursor-pointer text-foreground rounded-lg mx-2 my-1 transition-colors duration-200 data-[highlighted]:bg-primary/20 data-[highlighted]:text-foreground">最新发布</SelectItem>
+        <SelectItem value="oldest" className="hover:bg-accent focus:bg-primary/20 cursor-pointer text-foreground rounded-lg mx-2 my-1 transition-colors duration-200 data-[highlighted]:bg-primary/20 data-[highlighted]:text-foreground">最早发布</SelectItem>
+        <SelectItem value="popular" className="hover:bg-accent focus:bg-primary/20 cursor-pointer text-foreground rounded-lg mx-2 my-1 transition-colors duration-200 data-[highlighted]:bg-primary/20 data-[highlighted]:text-foreground">最受欢迎</SelectItem>
       </SelectContent>
     </Select>
   )

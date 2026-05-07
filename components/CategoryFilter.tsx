@@ -28,7 +28,7 @@ export default function CategoryFilter({ categories, currentCategory }: Category
       <Button
         variant={currentCategory ? "outline" : "default"}
         size="sm"
-        className={currentCategory ? "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900" : "bg-blue-600 hover:bg-blue-700 text-white"}
+        className={currentCategory ? "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground" : "bg-primary hover:bg-primary/90 text-white"}
         onClick={() => handleCategoryChange('all')}
       >
         全部
@@ -38,7 +38,7 @@ export default function CategoryFilter({ categories, currentCategory }: Category
           key={category.name}
           variant={currentCategory === category.name ? "default" : "outline"}
           size="sm"
-          className={currentCategory === category.name ? "bg-blue-600 hover:bg-blue-700 text-white" : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"}
+          className={currentCategory === category.name ? "bg-primary hover:bg-primary/90 text-white" : "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"}
           onClick={() => handleCategoryChange(category.name)}
         >
           {category.name}

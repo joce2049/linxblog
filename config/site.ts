@@ -9,11 +9,11 @@ export const siteConfig = {
     name: "LinX 后期工坊",
     logo: "/logo.png",
     favicon: "/favicon.ico",
-    // 品牌色彩
+    // 品牌色彩 — 午夜青蓝 + 冷银
     colors: {
-      primary: "#3B82F6",    // blue-500
-      secondary: "#8B5CF6",  // purple-500
-      accent: "#10B981"      // green-500
+      primary: "#102A43",    // 深主色（午夜青蓝）
+      secondary: "#5F7B8B",  // 冷银强调
+      accent: "#88B0C9"      // 暗色版主色 / 链接亮调
     },
     // 品牌标语
     tagline: "资源分享与技术交流",

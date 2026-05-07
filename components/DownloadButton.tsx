@@ -26,7 +26,7 @@ export default function DownloadButton({
     <Button
       size={size}
       variant={variant}
-      className={`text-xs px-2 py-1 border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 ${className}`}
+      className={`text-xs px-2 py-1 border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground ${className}`}
       onClick={handleDownload}
     >
       <Download className="w-3 h-3 mr-1" />

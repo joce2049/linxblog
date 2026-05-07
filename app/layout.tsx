@@ -1,10 +1,12 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import ReadingProgressBar from '@/components/ReadingProgressBar'
 import BackToTop from '@/components/BackToTop'
+import SiteFooter from '@/components/SiteFooter'
+import ThemeStyleInjector from '@/components/ThemeStyleInjector'
 import { siteConfig } from '@/config/site'
 
 // 配置字体
@@ -69,6 +71,26 @@ export const metadata: Metadata = {
     google: siteConfig.seo.verification.google,
     // bing: siteConfig.seo.verification.bing,
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/android-chrome-192x192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/android-chrome-512x512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
+    shortcut: '/favicon.ico',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F5F7FA' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B0F19' },
+  ],
 }
 
 export default function RootLayout({
@@ -79,10 +101,11 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
+        <ThemeStyleInjector />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://api.notion.com" />
       </head>
-      <body className="font-sans antialiased bg-gray-50">
+      <body className="font-sans antialiased bg-background text-foreground">
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
@@ -95,6 +118,9 @@ export default function RootLayout({
 
             {/* 主要内容 */}
             {children}
+
+            {/* 全站 footer */}
+            <SiteFooter />
 
             {/* 返回顶部按钮 */}
             <BackToTop />

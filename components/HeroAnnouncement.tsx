@@ -17,10 +17,10 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 }
 
 const typeStyles: Record<AnnouncementItem["type"], { badge: string; text: string; dot: string }> = {
-  info:    { badge: "bg-blue-100 text-blue-700",    text: "text-blue-600",  dot: "bg-blue-500" },
-  success: { badge: "bg-green-100 text-green-700",  text: "text-green-600", dot: "bg-green-500" },
-  warning: { badge: "bg-amber-100 text-amber-700",  text: "text-amber-600", dot: "bg-amber-500" },
-  tip:     { badge: "bg-purple-100 text-purple-700",text: "text-purple-600",dot: "bg-purple-500" },
+  info:    { badge: "bg-primary/10 text-primary",                       text: "text-foreground/80",    dot: "bg-primary" },
+  success: { badge: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400", text: "text-emerald-700 dark:text-emerald-400", dot: "bg-emerald-500" },
+  warning: { badge: "bg-amber-500/15 text-amber-700 dark:text-amber-400",       text: "text-amber-700 dark:text-amber-400",     dot: "bg-amber-500" },
+  tip:     { badge: "bg-secondary text-secondary-foreground",           text: "text-foreground/80",    dot: "bg-muted-foreground" },
 }
 
 export default function HeroAnnouncement() {
@@ -78,7 +78,7 @@ export default function HeroAnnouncement() {
         {current.link && (
           <Link
             href={current.link}
-            className="inline-flex items-center gap-1 text-sm font-medium text-blue-500 hover:text-blue-700 transition-colors"
+            className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
           >
             查看详情
             <span className="text-xs">&rarr;</span>
@@ -95,8 +95,8 @@ export default function HeroAnnouncement() {
               className={cn(
                 "h-2 rounded-full transition-all duration-300",
                 i === activeIndex
-                  ? "w-6 bg-blue-500"
-                  : "w-2 bg-gray-300 hover:bg-gray-400"
+                  ? "w-6 bg-primary"
+                  : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
               )}
               aria-label={`第 ${i + 1} 条公告`}
             />

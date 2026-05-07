@@ -14,7 +14,7 @@ export default function ClearFiltersButton() {
     <Button
       variant="ghost"
       size="sm"
-      className="text-blue-600 hover:bg-blue-100"
+      className="text-primary hover:bg-primary/20"
       onClick={handleClearFilters}
     >
       清除筛选

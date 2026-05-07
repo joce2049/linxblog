@@ -39,32 +39,32 @@ export default async function TagsPage() {
   }
 
   const getTagColor = (count: number) => {
-    if (count === maxCount) return 'text-blue-600 bg-blue-100'
-    if (count >= maxCount * 0.7) return 'text-purple-600 bg-purple-100'
-    if (count >= maxCount * 0.4) return 'text-green-600 bg-green-100'
-    if (count >= maxCount * 0.2) return 'text-orange-600 bg-orange-100'
-    return 'text-gray-600 bg-gray-100'
+    if (count === maxCount) return 'text-primary bg-primary/20'
+    if (count >= maxCount * 0.7) return 'text-primary bg-primary/10'
+    if (count >= maxCount * 0.4) return 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/15'
+    if (count >= maxCount * 0.2) return 'text-amber-600 dark:text-amber-400 bg-amber-500/15'
+    return 'text-muted-foreground bg-muted'
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background">
       <ConfigurableNavigation categories={categories} />
 
       <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-none mx-auto">
           {/* Page Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">资源标签</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-bold text-foreground mb-2">资源标签</h1>
+            <p className="text-muted-foreground">
               通过 {tags.length} 个专业标签，精准定位 {articles.length} 个优质资源
             </p>
           </div>
 
           {/* Tag Cloud */}
           <div className="mb-12">
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl">
+            <Card className="bg-card border border-border rounded-xl">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center">
                   <Tag className="w-5 h-5 mr-2" />
                   标签云
                 </h3>
@@ -77,7 +77,7 @@ export default async function TagsPage() {
                     >
                       <Badge
                         variant="secondary"
-                        className={`${getTagSize(tag.count)} ${getTagColor(tag.count)} px-3 py-2 hover:scale-105 transition-all duration-200 cursor-pointer group-hover:shadow-md`}
+                        className={`${getTagSize(tag.count)} ${getTagColor(tag.count)} px-3 py-2 hover:scale-105 transition-all duration-200 cursor-pointer`}
                       >
                         {tag.name}
                         <span className="ml-2 text-xs opacity-75">({tag.count})</span>
@@ -91,28 +91,28 @@ export default async function TagsPage() {
 
           {/* Popular Tags */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <TrendingUp className="w-6 h-6 mr-2 text-blue-600" />
+            <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center">
+              <TrendingUp className="w-6 h-6 mr-2 text-primary" />
               热门标签
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {tagStats.slice(0, 9).map((tag) => (
                 <Card
                   key={tag.name}
-                  className="bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 border-0 rounded-xl overflow-hidden group"
+                  className="bg-card border border-border card-hover rounded-xl overflow-hidden group"
                 >
                   <CardContent className="p-6">
                     {/* Tag Header */}
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                          <Tag className="w-6 h-6 text-white" />
+                        <div className="brand-logo-mark w-12 h-12 rounded-lg flex items-center justify-center">
+                          <Tag className="w-6 h-6" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
+                          <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">
                             {tag.name}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-sm text-muted-foreground">
                             {tag.count} 个资源
                           </p>
                         </div>
@@ -132,20 +132,20 @@ export default async function TagsPage() {
                     {/* Recent Articles */}
                     {tag.recentArticles.length > 0 && (
                       <div className="space-y-3">
-                        <h4 className="text-sm font-medium text-gray-700">相关资源</h4>
+                        <h4 className="text-sm font-medium text-foreground/80">相关资源</h4>
                         {tag.recentArticles.map((article: any) => (
                           <div
                             key={article.id}
-                            className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group/item"
+                            className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg hover:bg-accent transition-colors group/item"
                           >
-                            <div className="w-8 h-8 bg-blue-100 rounded-md flex items-center justify-center">
-                              <FileText className="w-4 h-4 text-blue-600" />
+                            <div className="w-8 h-8 bg-primary/15 rounded-md flex items-center justify-center">
+                              <FileText className="w-4 h-4 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h5 className="text-sm font-medium text-gray-900 truncate group-hover/item:text-blue-600 transition-colors">
+                              <h5 className="text-sm font-medium text-foreground truncate group-hover/item:text-primary transition-colors">
                                 {article.title}
                               </h5>
-                              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                              <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                                 <Calendar className="w-3 h-3" />
                                 <span>{new Date(article.date).toLocaleDateString('zh-CN')}</span>
                               </div>
@@ -156,11 +156,11 @@ export default async function TagsPage() {
                     )}
 
                     {/* View All Button */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
+                    <div className="mt-4 pt-4">
                       <Link href={`/articles?tag=${encodeURIComponent(tag.name)}`}>
                         <Button
                           variant="outline"
-                          className="w-full border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          className="w-full border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"
                         >
                           查看全部 {tag.count} 个资源
                         </Button>
@@ -174,7 +174,7 @@ export default async function TagsPage() {
 
           {/* All Tags */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">所有标签</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-6">所有标签</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {tagStats.map((tag) => (
                 <Link
@@ -182,15 +182,15 @@ export default async function TagsPage() {
                   href={`/articles?tag=${encodeURIComponent(tag.name)}`}
                   className="group"
                 >
-                  <Card className="bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-200 border-0 rounded-lg overflow-hidden">
+                  <Card className="bg-white/60 backdrop-blur-sm hover:bg-card/80 transition-all duration-200 border-0 rounded-lg overflow-hidden">
                     <CardContent className="p-4 text-center">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2 group-hover:bg-blue-200 transition-colors">
-                        <Tag className="w-4 h-4 text-blue-600" />
+                      <div className="w-8 h-8 bg-primary/15 rounded-full flex items-center justify-center mx-auto mb-2 group-hover:bg-primary/20 transition-colors">
+                        <Tag className="w-4 h-4 text-primary" />
                       </div>
-                      <h4 className="font-medium text-sm text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                      <h4 className="font-medium text-sm text-foreground group-hover:text-primary transition-colors truncate">
                         {tag.name}
                       </h4>
-                      <p className="text-xs text-gray-500 mt-1">{tag.count}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{tag.count}</p>
                     </CardContent>
                   </Card>
                 </Link>
@@ -200,29 +200,29 @@ export default async function TagsPage() {
 
           {/* Tag Statistics */}
           <div className="mt-12">
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl">
+            <Card className="bg-card border border-border rounded-xl">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">标签统计</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-4">标签统计</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">{tags.length}</div>
-                    <div className="text-sm text-gray-600">总标签数</div>
+                    <div className="text-2xl font-bold text-primary">{tags.length}</div>
+                    <div className="text-sm text-muted-foreground">总标签数</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{articles.length}</div>
-                    <div className="text-sm text-gray-600">总资源数</div>
+                    <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{articles.length}</div>
+                    <div className="text-sm text-muted-foreground">总资源数</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">
+                    <div className="text-2xl font-bold text-primary">
                       {Math.round(articles.length / tags.length)}
                     </div>
-                    <div className="text-sm text-gray-600">平均每标签资源</div>
+                    <div className="text-sm text-muted-foreground">平均每标签资源</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-orange-600">
+                    <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
                       {tagStats[0]?.name || '-'}
                     </div>
-                    <div className="text-sm text-gray-600">最热门标签</div>
+                    <div className="text-sm text-muted-foreground">最热门标签</div>
                   </div>
                 </div>
               </CardContent>

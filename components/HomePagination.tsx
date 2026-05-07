@@ -70,7 +70,7 @@ export default function HomePagination({
   return (
     <div className="flex flex-col items-center space-y-4 mt-12">
       {/* 分页信息 */}
-      <div className="text-sm text-gray-600">
+      <div className="text-sm text-muted-foreground">
         显示第 {startItem}-{endItem} 条，共 {totalItems} 条
       </div>
       
@@ -82,7 +82,7 @@ export default function HomePagination({
           size="sm"
           disabled={currentPage <= 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronLeft className="w-4 h-4 mr-1" />
           上一页
@@ -92,7 +92,7 @@ export default function HomePagination({
         {visiblePages.map((page, index) => (
           <div key={index}>
             {page === '...' ? (
-              <span className="px-3 py-2 text-gray-400">
+              <span className="px-3 py-2 text-muted-foreground/70">
                 <MoreHorizontal className="w-4 h-4" />
               </span>
             ) : (
@@ -100,7 +100,7 @@ export default function HomePagination({
                 variant={page === currentPage ? "default" : "outline"}
                 size="sm"
                 onClick={() => handlePageChange(page as number)}
-                className={page === currentPage ? "bg-blue-600 hover:bg-blue-700 text-white" : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"}
+                className={page === currentPage ? "bg-primary hover:bg-primary/90 text-white" : "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"}
               >
                 {page}
               </Button>
@@ -114,7 +114,7 @@ export default function HomePagination({
           size="sm"
           disabled={currentPage >= totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
         >
           下一页
           <ChevronRight className="w-4 h-4 ml-1" />
@@ -123,7 +123,7 @@ export default function HomePagination({
       
       {/* 快速跳转 */}
       {totalPages > 10 && (
-        <div className="flex items-center space-x-2 text-sm text-gray-600">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <span>快速跳转：</span>
           <div className="flex space-x-1">
             {[1, Math.ceil(totalPages / 2), totalPages].map((page) => (
@@ -132,7 +132,7 @@ export default function HomePagination({
                 variant="ghost"
                 size="sm"
                 onClick={() => handlePageChange(page)}
-                className="text-blue-600 hover:bg-blue-50 hover:text-blue-700 px-2 py-1 h-auto"
+                className="text-primary hover:bg-accent hover:text-primary px-2 py-1 h-auto"
               >
                 {page === Math.ceil(totalPages / 2) ? '中间' : page}
               </Button>

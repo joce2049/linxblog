@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 interface ArticleStats {
     views: number
@@ -16,6 +16,7 @@ export function useArticleStats(articleId: string) {
         isLiked: false,
         isLoading: true
     })
+    const likeInFlightRef = useRef(false)
 
     // 检查是否已点赞
     useEffect(() => {
@@ -82,6 +83,9 @@ export function useArticleStats(articleId: string) {
 
     // 点赞/取消点赞
     const toggleLike = async () => {
+        if (likeInFlightRef.current) return
+        likeInFlightRef.current = true
+
         const action = stats.isLiked ? 'unlike' : 'like'
         const likedKey = `article_liked_${articleId}`
 
@@ -110,6 +114,8 @@ export function useArticleStats(articleId: string) {
             }
         } catch (error) {
             console.error('Error toggling like:', error)
+        } finally {
+            likeInFlightRef.current = false
         }
     }
 

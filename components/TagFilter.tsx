@@ -34,8 +34,8 @@ export default function TagFilter({ tags, currentTags }: TagFilterProps) {
           variant={currentTags.includes(tag) ? "default" : "secondary"}
           className={`cursor-pointer transition-colors ${
             currentTags.includes(tag)
-              ? "bg-blue-600 hover:bg-blue-700 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ? "bg-primary hover:bg-primary/90 text-white"
+              : "bg-muted text-foreground/80 hover:bg-muted"
           }`}
           onClick={() => handleTagToggle(tag)}
         >

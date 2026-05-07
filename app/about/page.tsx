@@ -35,65 +35,65 @@ export default async function AboutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background">
       <ConfigurableNavigation categories={categories} />
 
       <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Page Header */}
           <div className="text-center mb-12">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-              <span className="text-white font-bold text-3xl">L</span>
+            <div className="brand-logo-mark w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <span className="font-bold text-3xl">L</span>
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">关于 {siteConfig.brand.name}</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h1 className="text-4xl font-bold text-foreground mb-4">关于 {siteConfig.brand.name}</h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               {siteConfig.brand.slogan}
             </p>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
+            <Card className="bg-card border border-border rounded-xl text-center">
               <CardContent className="p-6">
-                <FileText className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">{stats.totalArticles}</div>
-                <div className="text-sm text-gray-600">总资源数</div>
+                <FileText className="w-8 h-8 text-primary mx-auto mb-3" />
+                <div className="text-2xl font-bold text-foreground">{stats.totalArticles}</div>
+                <div className="text-sm text-muted-foreground">总资源数</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
+            <Card className="bg-card border border-border rounded-xl text-center">
               <CardContent className="p-6">
-                <Database className="w-8 h-8 text-green-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">{stats.totalCategories}</div>
-                <div className="text-sm text-gray-600">分类数量</div>
+                <Database className="w-8 h-8 text-emerald-600 dark:text-emerald-400 mx-auto mb-3" />
+                <div className="text-2xl font-bold text-foreground">{stats.totalCategories}</div>
+                <div className="text-sm text-muted-foreground">分类数量</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
+            <Card className="bg-card border border-border rounded-xl text-center">
               <CardContent className="p-6">
-                <Code className="w-8 h-8 text-purple-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">{stats.totalTags}</div>
-                <div className="text-sm text-gray-600">标签数量</div>
+                <Code className="w-8 h-8 text-primary mx-auto mb-3" />
+                <div className="text-2xl font-bold text-foreground">{stats.totalTags}</div>
+                <div className="text-sm text-muted-foreground">标签数量</div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl text-center">
+            <Card className="bg-card border border-border rounded-xl text-center">
               <CardContent className="p-6">
-                <Zap className="w-8 h-8 text-orange-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">{stats.latestUpdate}</div>
-                <div className="text-sm text-gray-600">最新更新</div>
+                <Zap className="w-8 h-8 text-amber-600 dark:text-amber-400 mx-auto mb-3" />
+                <div className="text-2xl font-bold text-foreground">{stats.latestUpdate}</div>
+                <div className="text-sm text-muted-foreground">最新更新</div>
               </CardContent>
             </Card>
           </div>
 
           {/* Announcement */}
-          <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl mb-12">
+          <Card className="bg-card border border-border rounded-xl mb-12">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center flex items-center justify-center">
-                <Globe className="w-6 h-6 mr-2 text-blue-600" />
+              <h2 className="text-2xl font-bold text-foreground mb-6 text-center flex items-center justify-center">
+                <Globe className="w-6 h-6 mr-2 text-primary" />
                 公告
               </h2>
-              <div className="text-center space-y-4 text-gray-700 leading-relaxed">
+              <div className="text-center space-y-4 text-foreground/80 leading-relaxed">
                 <p className="text-base">
                   所有分享仅供学习使用，请勿用于商业。
                 </p>
@@ -109,7 +109,7 @@ export default async function AboutPage() {
                     href={siteConfig.social.platforms.xiaohongshu.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                    className="text-primary hover:text-primary hover:underline transition-colors"
                   >
                     LinX后期工坊
                   </a>
@@ -119,18 +119,18 @@ export default async function AboutPage() {
                     href={siteConfig.social.platforms.bilibili.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                    className="text-primary hover:text-primary hover:underline transition-colors"
                   >
                     野生技术协会会长
                   </a>
                 </p>
                 <div className="pt-4 pb-2">
-                  <p className="text-base font-semibold text-orange-600 flex items-center justify-center">
+                  <p className="text-base font-semibold text-amber-600 dark:text-amber-400 flex items-center justify-center">
                     <span className="mr-2">⚠️</span>
                     下载前请务必先转存，避免资源失效！
                   </p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    （如需解压）密码：<span className="font-mono bg-gray-100 px-2 py-1 rounded">bzysjsxhhz</span>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    （如需解压）密码：<span className="font-mono bg-muted px-2 py-1 rounded">bzysjsxhhz</span>
                   </p>
                 </div>
               </div>
@@ -138,32 +138,32 @@ export default async function AboutPage() {
           </Card>
 
           {/* Features */}
-          <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl mb-12">
+          <Card className="bg-card border border-border rounded-xl mb-12">
             <CardContent className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">核心功能</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-6 text-center">核心功能</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Search className="w-8 h-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-primary/15 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Search className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">智能搜索</h3>
-                  <p className="text-sm text-gray-600">快速定位所需资源，支持关键词和标签搜索</p>
+                  <h3 className="font-semibold text-foreground mb-2">智能搜索</h3>
+                  <p className="text-sm text-muted-foreground">快速定位所需资源，支持关键词和标签搜索</p>
                 </div>
 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="w-8 h-8 text-green-600" />
+                  <div className="w-16 h-16 bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">分类管理</h3>
-                  <p className="text-sm text-gray-600">专业的分类系统，便于资源整理和发现</p>
+                  <h3 className="font-semibold text-foreground mb-2">分类管理</h3>
+                  <p className="text-sm text-muted-foreground">专业的分类系统，便于资源整理和发现</p>
                 </div>
 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Shield className="w-8 h-8 text-purple-600" />
+                  <div className="w-16 h-16 bg-primary/15 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">数据安全</h3>
-                  <p className="text-sm text-gray-600">基于 Notion 的安全数据存储和访问控制</p>
+                  <h3 className="font-semibold text-foreground mb-2">数据安全</h3>
+                  <p className="text-sm text-muted-foreground">基于 Notion 的安全数据存储和访问控制</p>
                 </div>
               </div>
             </CardContent>
@@ -171,19 +171,19 @@ export default async function AboutPage() {
 
           {/* Contact & Links */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl">
+            <Card className="bg-card border border-border rounded-xl">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">联系我们</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">联系我们</h2>
                 <div className="space-y-3">
-                  <a href={`mailto:${siteConfig.social.email}`} className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <a href={`mailto:${siteConfig.social.email}`} className="flex items-center space-x-3 text-foreground/80 hover:text-primary transition-colors">
                     <Mail className="w-5 h-5" />
                     <span>{siteConfig.social.email}</span>
                   </a>
-                  <a href={siteConfig.social.platforms.bilibili.url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <a href={siteConfig.social.platforms.bilibili.url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-foreground/80 hover:text-primary transition-colors">
                     <BilibiliIcon className="w-5 h-5" />
                     <span>哔哩哔哩</span>
                   </a>
-                  <a href={siteConfig.social.platforms.xiaohongshu.url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 transition-colors">
+                  <a href={siteConfig.social.platforms.xiaohongshu.url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-3 text-foreground/80 hover:text-pink-600 transition-colors">
                     <XiaohongshuIcon className="w-5 h-5" />
                     <span>小红书</span>
                   </a>
@@ -191,19 +191,19 @@ export default async function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/80 backdrop-blur-sm border-0 rounded-xl">
+            <Card className="bg-card border border-border rounded-xl">
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">快速导航</h2>
+                <h2 className="text-2xl font-bold text-foreground mb-4">快速导航</h2>
                 <div className="space-y-3">
-                  <Link href="/articles" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link href="/articles" className="flex items-center space-x-3 text-foreground/80 hover:text-primary transition-colors">
                     <FileText className="w-5 h-5" />
                     <span>浏览所有资源</span>
                   </Link>
-                  <Link href="/categories" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link href="/categories" className="flex items-center space-x-3 text-foreground/80 hover:text-primary transition-colors">
                     <Database className="w-5 h-5" />
                     <span>查看分类</span>
                   </Link>
-                  <Link href="/tags" className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 transition-colors">
+                  <Link href="/tags" className="flex items-center space-x-3 text-foreground/80 hover:text-primary transition-colors">
                     <Code className="w-5 h-5" />
                     <span>浏览标签</span>
                   </Link>
@@ -214,11 +214,11 @@ export default async function AboutPage() {
 
           {/* Footer */}
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 text-gray-600 mb-4">
+            <div className="flex items-center justify-center space-x-2 text-muted-foreground mb-4">
               <Heart className="w-5 h-5 text-red-500" />
               <span>Made with love for the creative community</span>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               © {siteConfig.footer.copyright.year} {siteConfig.footer.copyright.owner}. {siteConfig.footer.copyright.statement}
             </p>
           </div>

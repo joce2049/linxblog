@@ -27,7 +27,7 @@ export default function ShareButton({ title, description }: ShareButtonProps) {
     <Button
       variant="outline"
       size="sm"
-      className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+      className="border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"
       onClick={handleShare}
     >
       <Share2 className="w-4 h-4" />

@@ -28,7 +28,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
           size="sm"
           disabled={currentPage <= 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
         >
           上一页
         </Button>
@@ -43,7 +43,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
                 key={pageNum}
                 variant={pageNum === currentPage ? "default" : "outline"}
                 size="sm"
-                className={pageNum === currentPage ? "bg-blue-600 hover:bg-blue-700 text-white" : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"}
+                className={pageNum === currentPage ? "bg-primary hover:bg-primary/90 text-white" : "border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"}
                 onClick={() => handlePageChange(pageNum)}
               >
                 {pageNum}
@@ -57,7 +57,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
           size="sm"
           disabled={currentPage >= totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
         >
           下一页
         </Button>

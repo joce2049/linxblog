@@ -23,11 +23,11 @@ export default function LoadingSpinner({
   return (
     <div className={cn("flex flex-col items-center justify-center", className)}>
       <div className={cn(
-        "border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin",
+        "border-4 border-border border-t-primary rounded-full animate-spin",
         sizeClasses[size]
       )} />
       {text && (
-        <p className="mt-3 text-sm text-gray-600 animate-pulse">
+        <p className="mt-3 text-sm text-muted-foreground animate-pulse">
           {text}
         </p>
       )}
@@ -38,10 +38,10 @@ export default function LoadingSpinner({
 // 页面级加载组件
 export function PageLoading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center">
         <LoadingSpinner size="xl" text="页面加载中..." />
-        <p className="mt-4 text-gray-500">请稍候...</p>
+        <p className="mt-4 text-muted-foreground">请稍候...</p>
       </div>
     </div>
   )

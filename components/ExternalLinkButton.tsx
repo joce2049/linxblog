@@ -16,7 +16,7 @@ export default function ExternalLinkButton({ url }: ExternalLinkButtonProps) {
     <Button
       variant="outline"
       size="lg"
-      className="flex-1 border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+      className="flex-1 border-border bg-card text-foreground/80 hover:bg-muted/50 hover:text-foreground"
       onClick={handleExternalLink}
     >
       <ExternalLink className="w-5 h-5 mr-2" />

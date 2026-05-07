@@ -41,6 +41,8 @@ export default function UnifiedImage({
 
     return (
         <img
+            loading="lazy"
+            decoding="async"
             src={imgSrc}
             alt={alt}
             className={cn(

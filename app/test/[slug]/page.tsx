@@ -36,27 +36,27 @@ export default async function TestPage({ params }: TestPageProps) {
     const contentResult = await getFullPageContent(article.id) as any
 
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
+        <div className="min-h-screen bg-muted/50 py-8">
             <div className="container max-w-6xl mx-auto px-4">
                 {/* 头部信息 */}
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-4">📊 Notion 内容测试页面</h1>
+                <div className="bg-card rounded-lg p-6 mb-6">
+                    <h1 className="text-3xl font-bold text-foreground mb-4">📊 Notion 内容测试页面</h1>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
                             <span className="font-semibold">文章标题：</span>
-                            <span className="text-gray-700">{article.title}</span>
+                            <span className="text-foreground/80">{article.title}</span>
                         </div>
                         <div>
                             <span className="font-semibold">文章 ID：</span>
-                            <span className="text-gray-700 font-mono text-xs">{article.id}</span>
+                            <span className="text-foreground/80 font-mono text-xs">{article.id}</span>
                         </div>
                         <div>
                             <span className="font-semibold">内容块数量：</span>
-                            <span className="text-blue-600 font-bold">{contentResult.blockCount}</span>
+                            <span className="text-primary font-bold">{contentResult.blockCount}</span>
                         </div>
                         <div>
                             <span className="font-semibold">有内容：</span>
-                            <span className={contentResult.hasContent ? 'text-green-600' : 'text-red-600'}>
+                            <span className={contentResult.hasContent ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600'}>
                                 {contentResult.hasContent ? '✅ 是' : '❌ 否'}
                             </span>
                         </div>
@@ -64,48 +64,48 @@ export default async function TestPage({ params }: TestPageProps) {
                 </div>
 
                 {/* 内容块类型分布 */}
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">📦 内容块类型分布</h2>
+                <div className="bg-card rounded-lg p-6 mb-6">
+                    <h2 className="text-xl font-bold text-foreground mb-4">📦 内容块类型分布</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {Object.entries(contentResult.typeDistribution).map(([type, count]) => (
-                            <div key={type} className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                                <div className="text-xs text-gray-600 mb-1">{type}</div>
-                                <div className="text-2xl font-bold text-blue-600">{count as number}</div>
+                            <div key={type} className="bg-primary/10 border border-border rounded-lg p-3">
+                                <div className="text-xs text-muted-foreground mb-1">{type}</div>
+                                <div className="text-2xl font-bold text-primary">{count as number}</div>
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* 所有内容块详情 */}
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">🔍 所有内容块详情</h2>
+                <div className="bg-card rounded-lg p-6 mb-6">
+                    <h2 className="text-xl font-bold text-foreground mb-4">🔍 所有内容块详情</h2>
                     <div className="space-y-4">
                         {contentResult.blocks.map((block: any, index: number) => (
-                            <div key={block.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors">
+                            <div key={block.id} className="border border-border rounded-lg p-4 hover:border-primary/60 transition-colors">
                                 <div className="flex items-start justify-between mb-3">
                                     <div className="flex items-center gap-3">
-                                        <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
+                                        <span className="bg-primary/15 text-primary px-3 py-1 rounded-full text-xs font-semibold">
                                             #{index + 1}
                                         </span>
-                                        <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                                        <span className="bg-muted text-muted-foreground px-3 py-1 rounded-full text-sm font-medium">
                                             {block.type}
                                         </span>
                                     </div>
-                                    <span className="text-xs text-gray-500 font-mono">
+                                    <span className="text-xs text-muted-foreground font-mono">
                                         {block.id}
                                     </span>
                                 </div>
 
                                 {/* 内容预览 */}
-                                <div className="bg-gray-50 rounded p-3 mb-2">
-                                    <div className="text-xs text-gray-500 mb-1">内容预览：</div>
-                                    <pre className="text-sm text-gray-800 whitespace-pre-wrap break-words">
+                                <div className="bg-muted/50 rounded p-3 mb-2">
+                                    <div className="text-xs text-muted-foreground mb-1">内容预览：</div>
+                                    <pre className="text-sm text-foreground/85 whitespace-pre-wrap break-words">
                                         {JSON.stringify(block[block.type], null, 2)}
                                     </pre>
                                 </div>
 
                                 {/* 时间信息 */}
-                                <div className="flex gap-4 text-xs text-gray-500">
+                                <div className="flex gap-4 text-xs text-muted-foreground">
                                     <div>
                                         创建：{new Date(block.created_time).toLocaleString('zh-CN')}
                                     </div>
@@ -119,8 +119,8 @@ export default async function TestPage({ params }: TestPageProps) {
                 </div>
 
                 {/* 生成的 HTML 内容 */}
-                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">🎨 生成的 HTML 内容</h2>
+                <div className="bg-card rounded-lg p-6 mb-6">
+                    <h2 className="text-xl font-bold text-foreground mb-4">🎨 生成的 HTML 内容</h2>
                     <div className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto">
                         <pre className="text-xs whitespace-pre-wrap break-words">
                             {contentResult.htmlContent}
@@ -129,9 +129,9 @@ export default async function TestPage({ params }: TestPageProps) {
                 </div>
 
                 {/* 渲染效果预览 */}
-                <div className="bg-white rounded-lg shadow-md p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">👁️ 渲染效果预览</h2>
-                    <div className="border border-gray-200 rounded-lg p-6">
+                <div className="bg-card rounded-lg p-6">
+                    <h2 className="text-xl font-bold text-foreground mb-4">👁️ 渲染效果预览</h2>
+                    <div className="border border-border rounded-lg p-6">
                         <div
                             className="article-content
                 [&>*]:max-w-none
@@ -157,7 +157,7 @@ export default async function TestPage({ params }: TestPageProps) {
                 <div className="mt-8 text-center">
                     <a
                         href={`/articles/${params.slug}`}
-                        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                        className="inline-block bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
                     >
                         ← 返回正常文章页面
                     </a>
