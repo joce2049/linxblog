@@ -18,9 +18,8 @@ import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import Link from "next/link"
 import { siteConfig } from "@/config/site"
 
-// 强制动态渲染
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// 仅展示统计数字，用 ISR（5 分钟）缓存即可，无需每次动态全量拉取
+export const revalidate = 300
 
 export default async function AboutPage() {
   const articles = await getDatabase()
