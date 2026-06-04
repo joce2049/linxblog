@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import { rateLimit, getClientIp, rateLimitConfigs } from '@/lib/rate-limit'
 
+// 该接口读取请求头（限流取 IP），必须动态执行；显式声明避免 Next 静态生成时抛 DYNAMIC_SERVER_USAGE
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
     try {
         // 速率限制检查
