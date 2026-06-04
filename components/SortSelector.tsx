@@ -5,16 +5,17 @@ import { useRouter, useSearchParams } from "next/navigation"
 
 interface SortSelectorProps {
   currentSort: string
+  basePath?: string
 }
 
-export default function SortSelector({ currentSort }: SortSelectorProps) {
+export default function SortSelector({ currentSort, basePath = '/articles' }: SortSelectorProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const handleSortChange = (value: string) => {
     const params = new URLSearchParams(searchParams)
     params.set('sort', value)
-    router.push(`/articles?${params.toString()}`)
+    router.push(`${basePath}?${params.toString()}`)
   }
 
   return (

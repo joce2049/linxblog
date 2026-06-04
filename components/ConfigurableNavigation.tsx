@@ -10,6 +10,7 @@ import {
   Folder,
   Tag,
   Info,
+  BookOpen,
   ChevronDown,
   Menu,
   X,
@@ -82,6 +83,7 @@ export default function ConfigurableNavigation({ categories }: ConfigurableNavig
       Folder,
       Tag,
       Info,
+      BookOpen,
       Search: Search,
       ExternalLink,
     }

@@ -6,16 +6,17 @@ import { useRouter, useSearchParams } from "next/navigation"
 interface PaginationProps {
   currentPage: number
   totalPages: number
+  basePath?: string
 }
 
-export default function Pagination({ currentPage, totalPages }: PaginationProps) {
+export default function Pagination({ currentPage, totalPages, basePath = '/articles' }: PaginationProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const handlePageChange = (page: number) => {
     const params = new URLSearchParams(searchParams)
     params.set('page', page.toString())
-    router.push(`/articles?${params.toString()}`)
+    router.push(`${basePath}?${params.toString()}`)
   }
 
   if (totalPages <= 1) return null

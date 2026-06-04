@@ -49,6 +49,29 @@ export function generateArticleUrl(title: string, id: string): string {
 }
 
 /**
+ * 根据学习资源标题和ID生成资源URL（slug 规则与文章一致，仅前缀为 /resources）
+ */
+export function generateResourceUrl(title: string, id: string): string {
+  if (!title || !id) {
+    return `/resources/${id || 'unknown'}`
+  }
+
+  const slug = generateSlug(title)
+
+  // 如果slug为空或太短，使用ID
+  if (!slug || slug.length < 3) {
+    return `/resources/${id}`
+  }
+
+  // 如果slug只包含数字，添加前缀避免与ID混淆
+  if (/^\d+$/.test(slug)) {
+    return `/resources/resource-${slug}`
+  }
+
+  return `/resources/${slug}`
+}
+
+/**
  * 从slug中提取文章ID
  * @param slug - URL slug
  * @param articles - 文章数组（可选，用于备用查找）

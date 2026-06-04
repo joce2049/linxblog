@@ -105,6 +105,8 @@ export const siteConfig = {
         visible: true,
         children: "categories" as const,
       },
+      // 学习资源：独立的 Notion 数据库，标签体系与文章库不同，单独成页
+      { name: "学习资源", href: "/resources", icon: "BookOpen", visible: true },
       //{ name: "标签", href: "/tags", icon: "Tag", visible: true },
       { name: "关于", href: "/about", icon: "Info", visible: true },
       //{ name: "B站", href: "https://space.bilibili.com/", icon: "ExternalLink", visible: true, external: true },
@@ -203,6 +205,16 @@ export const siteConfig = {
         { value: "oldest", label: "最旧" },
         { value: "popular", label: "最热" },
       ],
+      grid: {
+        columns: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+        gap: "gap-6",
+      },
+    },
+    // 学习资源页（独立 Notion 数据库，与文章库互不干扰）
+    resources: {
+      title: "学习资源",
+      subtitle: "精选学习资料与教程，持续更新",
+      itemsPerPage: 30,
       grid: {
         columns: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
         gap: "gap-6",
@@ -486,6 +498,8 @@ export const envConfig = {
   notion: {
     apiKey: process.env.NOTION_API_KEY || "",
     databaseId: process.env.NOTION_DATABASE_ID || "",
+    // 学习资源数据库 ID（与主库共用同一个集成 API Key；需在 Notion 中把该库也连接到同一集成）
+    resourcesDatabaseId: process.env.NOTION_RESOURCES_DATABASE_ID || "",
     // 数据库属性映射（根据你的实际数据库结构调整）
     properties: {
       title: "标题",
@@ -499,6 +513,17 @@ export const envConfig = {
       likes: "热门资源",
       date: "创建时间",
       url: "网盘1",
+      status: "Published",
+    },
+    // 学习资源库属性映射（列结构与文章库不同：分类列叫「资源类型」、链接列叫「网盘」、额外有「提取码」）
+    // 取值类型与主库一致（select / multi_select / files / url），故只是列名不同；资源库没有的列不必列出，会自动降级
+    resourcesProperties: {
+      title: "标题",
+      category: "资源类型",
+      tags: "标签",
+      image: "封面",
+      url: "网盘",
+      extractCode: "提取码",
       status: "Published",
     },
     // 数据获取配置

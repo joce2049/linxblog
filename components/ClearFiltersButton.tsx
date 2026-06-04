@@ -3,11 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 
-export default function ClearFiltersButton() {
+export default function ClearFiltersButton({ basePath = '/articles' }: { basePath?: string }) {
   const router = useRouter()
 
   const handleClearFilters = () => {
-    router.push('/articles')
+    router.push(basePath)
   }
 
   return (
