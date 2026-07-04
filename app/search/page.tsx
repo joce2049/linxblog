@@ -15,6 +15,8 @@ import UnifiedImage from "@/components/UnifiedImage"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
+const SEARCH_CACHE_KEY = 'search_articles_cache_v2'
+const SEARCH_CACHE_TTL = 5 * 60 * 1000
 
 interface Article {
   id: string
@@ -77,23 +79,42 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
   }, [searchQuery, selectedCategory, selectedTag, sortBy, articles])
 
   const fetchData = async () => {
-    try {
-      // 添加缓存机制，避免重复请求
-      const cacheKey = 'search_articles_cache'
-      const cachedData = sessionStorage.getItem(cacheKey)
+    const readCachedData = (allowExpired = false) => {
+      try {
+        const cachedData = sessionStorage.getItem(SEARCH_CACHE_KEY)
+        if (!cachedData) return null
 
-      if (cachedData) {
         const data = JSON.parse(cachedData)
-        setArticles(data.articles || [])
-        setCategories(data.categories || [])
+        const isFresh = typeof data.expiresAt === 'number' && data.expiresAt > Date.now()
+
+        if (!allowExpired && !isFresh) {
+          sessionStorage.removeItem(SEARCH_CACHE_KEY)
+          return null
+        }
+
+        return data
+      } catch {
+        sessionStorage.removeItem(SEARCH_CACHE_KEY)
+        return null
+      }
+    }
+
+    try {
+      // 清理旧缓存，避免继续使用已经过期的 Notion 图片签名链接
+      sessionStorage.removeItem('search_articles_cache')
+
+      const cachedData = readCachedData()
+      if (cachedData) {
+        setArticles(cachedData.articles || [])
+        setCategories(cachedData.categories || [])
         setIsLoading(false)
         return
       }
 
       const response = await fetch('/api/articles', {
-        // 添加缓存头
+        cache: 'no-store',
         headers: {
-          'Cache-Control': 'max-age=300', // 5分钟缓存
+          'Cache-Control': 'no-cache',
         }
       })
 
@@ -103,19 +124,21 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
 
       const data = await response.json()
 
-      // 缓存数据到sessionStorage
-      sessionStorage.setItem(cacheKey, JSON.stringify(data))
+      // Notion 文件链接有效期较短，只短暂缓存数据，避免图片 URL 过期后仍被复用
+      sessionStorage.setItem(SEARCH_CACHE_KEY, JSON.stringify({
+        ...data,
+        expiresAt: Date.now() + SEARCH_CACHE_TTL,
+      }))
 
       setArticles(data.articles || [])
       setCategories(data.categories || [])
     } catch (error) {
       console.error('Failed to fetch data:', error)
-      // 如果API失败，尝试使用缓存数据
-      const cachedData = sessionStorage.getItem('search_articles_cache')
+      // 如果 API 临时失败，才退回到当前版本缓存
+      const cachedData = readCachedData(true)
       if (cachedData) {
-        const data = JSON.parse(cachedData)
-        setArticles(data.articles || [])
-        setCategories(data.categories || [])
+        setArticles(cachedData.articles || [])
+        setCategories(cachedData.categories || [])
       }
     } finally {
       setIsLoading(false)
