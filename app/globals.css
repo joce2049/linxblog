@@ -227,6 +227,55 @@
   .underline-warm {
     border-bottom: 1px solid hsl(var(--accent-warm) / 0.4);
   }
+
+  /* 内容防复制：只作用于显式保护区域，避免影响搜索、按钮等交互 */
+  .copy-protected,
+  .article-content {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .copy-protected img,
+  .article-content img {
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+
+  .copy-protected input,
+  .copy-protected textarea,
+  .copy-protected select,
+  .copy-protected option,
+  .copy-protected button,
+  .copy-protected a,
+  .copy-protected pre,
+  .copy-protected code,
+  .copy-protected kbd,
+  .copy-protected samp,
+  .copy-protected iframe,
+  .copy-protected audio,
+  .copy-protected video,
+  .copy-protected [contenteditable="true"],
+  .copy-protected [data-copy-allow],
+  .copy-protected .copy-allow,
+  .article-content input,
+  .article-content textarea,
+  .article-content select,
+  .article-content option,
+  .article-content button,
+  .article-content a,
+  .article-content pre,
+  .article-content code,
+  .article-content kbd,
+  .article-content samp,
+  .article-content iframe,
+  .article-content audio,
+  .article-content video,
+  .article-content [contenteditable="true"],
+  .article-content [data-copy-allow],
+  .article-content .copy-allow {
+    -webkit-user-select: text;
+    user-select: text;
+  }
 }
 
 /* 工具样式 */

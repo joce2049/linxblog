@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import ReadingProgressBar from '@/components/ReadingProgressBar'
+import ContentProtection from '@/components/ContentProtection'
 import BackToTop from '@/components/BackToTop'
 import SiteFooter from '@/components/SiteFooter'
 import ThemeStyleInjector from '@/components/ThemeStyleInjector'
@@ -115,6 +116,9 @@ export default function RootLayout({
           >
             {/* 阅读进度条 */}
             <ReadingProgressBar />
+
+            {/* 内容防复制保护 */}
+            <ContentProtection />
 
             {/* 主要内容 */}
             {children}

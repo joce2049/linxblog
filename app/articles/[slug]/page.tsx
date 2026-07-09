@@ -250,7 +250,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         {/* 文章内容主体 - 宽屏显示 */}
         <main className="container max-w-6xl mx-auto px-4 py-8 lg:py-12">
           {/* 文章内容 */}
-          <article className="bg-card border border-border rounded-2xl p-6 md:p-10 lg:p-14 mb-12">
+          <article className="copy-protected bg-card border border-border rounded-2xl p-6 md:p-10 lg:p-14 mb-12">
             {/* 文章属性信息 */}
             <div className="mb-12 pb-8 border-b border-border/50">
               <h3 className="text-lg font-semibold text-foreground mb-4">📋 资源信息</h3>
