@@ -4,6 +4,11 @@ import { rateLimit, getClientIp, rateLimitConfigs } from '@/lib/rate-limit'
 
 // 该接口读取请求头（限流取 IP），必须动态执行；显式声明避免 Next 静态生成时抛 DYNAMIC_SERVER_USAGE
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+const noStoreHeaders = {
+    'Cache-Control': 'no-store, max-age=0'
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -62,6 +67,8 @@ export async function POST(request: NextRequest) {
             success: true,
             views: data[0]?.views || 0,
             likes: data[0]?.likes || 0
+        }, {
+            headers: noStoreHeaders
         })
     } catch (error) {
         console.error('Error in view API:', error)

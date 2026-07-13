@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { dispatchArticleStatsUpdate } from '@/lib/article-stats-events'
 
 interface ArticleStats {
     views: number
@@ -16,6 +17,7 @@ export function useArticleStats(articleId: string) {
         isLiked: false,
         isLoading: true
     })
+    const viewInFlightRef = useRef(false)
     const likeInFlightRef = useRef(false)
 
     // 检查是否已点赞
@@ -31,29 +33,43 @@ export function useArticleStats(articleId: string) {
             const viewedKey = `article_viewed_${articleId}`
             const hasViewed = sessionStorage.getItem(viewedKey)
 
-            if (!hasViewed) {
+            if (!hasViewed && !viewInFlightRef.current) {
+                viewInFlightRef.current = true
+
                 try {
                     const response = await fetch('/api/analytics/view', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ articleId })
+                        body: JSON.stringify({ articleId }),
+                        cache: 'no-store'
                     })
 
-                    if (response.ok) {
-                        const data = await response.json()
-                        setStats(prev => ({
-                            ...prev,
-                            views: data.views,
-                            likes: data.likes,
-                            isLoading: false
-                        }))
-                        sessionStorage.setItem(viewedKey, 'true')
+                    if (!response.ok) {
+                        throw new Error(`Failed to record view: ${response.status}`)
                     }
+
+                    const data = await response.json()
+                    const updatedStats = {
+                        articleId,
+                        views: data.views,
+                        likes: data.likes
+                    }
+
+                    setStats(prev => ({
+                        ...prev,
+                        views: updatedStats.views,
+                        likes: updatedStats.likes,
+                        isLoading: false
+                    }))
+                    dispatchArticleStatsUpdate(updatedStats)
+                    sessionStorage.setItem(viewedKey, 'true')
                 } catch (error) {
                     console.error('Error recording view:', error)
                     setStats(prev => ({ ...prev, isLoading: false }))
+                } finally {
+                    viewInFlightRef.current = false
                 }
-            } else {
+            } else if (hasViewed) {
                 // 已经记录过，只获取当前统计
                 fetchStats()
             }
@@ -61,17 +77,28 @@ export function useArticleStats(articleId: string) {
 
         const fetchStats = async () => {
             try {
-                const response = await fetch(`/api/analytics/stats?articleIds=${articleId}`)
-                if (response.ok) {
-                    const data = await response.json()
-                    const stat = data.stats[articleId] || { views: 0, likes: 0 }
-                    setStats(prev => ({
-                        ...prev,
-                        views: stat.views,
-                        likes: stat.likes,
-                        isLoading: false
-                    }))
+                const response = await fetch(`/api/analytics/stats?articleIds=${articleId}`, {
+                    cache: 'no-store'
+                })
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch stats: ${response.status}`)
                 }
+
+                const data = await response.json()
+                const stat = data.stats[articleId] || { views: 0, likes: 0 }
+                const updatedStats = {
+                    articleId,
+                    views: stat.views,
+                    likes: stat.likes
+                }
+
+                setStats(prev => ({
+                    ...prev,
+                    views: updatedStats.views,
+                    likes: updatedStats.likes,
+                    isLoading: false
+                }))
+                dispatchArticleStatsUpdate(updatedStats)
             } catch (error) {
                 console.error('Error fetching stats:', error)
                 setStats(prev => ({ ...prev, isLoading: false }))
@@ -93,24 +120,34 @@ export function useArticleStats(articleId: string) {
             const response = await fetch('/api/analytics/like', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ articleId, action })
+                body: JSON.stringify({ articleId, action }),
+                cache: 'no-store'
             })
 
-            if (response.ok) {
-                const data = await response.json()
-                const newIsLiked = !stats.isLiked
+            if (!response.ok) {
+                throw new Error(`Failed to toggle like: ${response.status}`)
+            }
 
-                setStats(prev => ({
-                    ...prev,
-                    likes: data.likes,
-                    isLiked: newIsLiked
-                }))
+            const data = await response.json()
+            const newIsLiked = !stats.isLiked
+            const updatedStats = {
+                articleId,
+                views: data.views,
+                likes: data.likes
+            }
 
-                if (newIsLiked) {
-                    localStorage.setItem(likedKey, 'true')
-                } else {
-                    localStorage.removeItem(likedKey)
-                }
+            setStats(prev => ({
+                ...prev,
+                views: updatedStats.views,
+                likes: updatedStats.likes,
+                isLiked: newIsLiked
+            }))
+            dispatchArticleStatsUpdate(updatedStats)
+
+            if (newIsLiked) {
+                localStorage.setItem(likedKey, 'true')
+            } else {
+                localStorage.removeItem(likedKey)
             }
         } catch (error) {
             console.error('Error toggling like:', error)
