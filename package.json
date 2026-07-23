@@ -12,7 +12,8 @@
     "check:db": "node check-database.js",
     "fix": "node quick-fix.js",
     "fix:hydration": "node fix-hydration.js",
-    "test:pages": "node test-pages.js"
+    "test:pages": "node test-pages.js",
+    "test:cache": "node --test tests/notion-cache.test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
