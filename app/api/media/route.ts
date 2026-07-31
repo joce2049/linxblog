@@ -17,9 +17,6 @@ import { getFreshImageUrl, getFreshBlockMediaUrl, getFreshImageUrlMap } from '@/
  * - 正文媒体：按块 retrieve（一页通常没几张），配合 last-resolved 成功缓存去重。
  */
 
-// 边缘/浏览器缓存时长：远小于 S3 URL 的 1 小时有效期，保证跟随重定向时目标至少还有 ~30min 余量。
-const EDGE_MAX_AGE_S = 30 * 60
-
 // 单条 last-resolved 缓存：成功窗口内复用免打 Notion；Notion 抖动时回退更久（仍在 1h 有效期内）的旧 URL。
 const SUCCESS_TTL_MS = 10 * 60 * 1000
 const RESOLVE_TTL_MS = 30 * 60 * 1000
@@ -57,10 +54,12 @@ async function resolveCover(pageId: string): Promise<string | null> {
 
 function redirectTo(url: string) {
   const res = NextResponse.redirect(url, 302)
-  // 让 Vercel 边缘全球缓存该 302；stale-while-revalidate 仅覆盖后台重解析的极短窗口
+  // 让 Vercel 边缘全球缓存该 302（s-maxage）；浏览器只短缓存（max-age）。
+  // 关键：边缘 + 浏览器的「叠加陈旧」上限 = max-age + s-maxage ≈ 35min，远小于 S3 URL 的 60min 有效期，
+  // 保证任何时刻跟随该 302 时目标都还有充足余量，绝不会 403。
   res.headers.set(
     'Cache-Control',
-    `public, max-age=${EDGE_MAX_AGE_S}, s-maxage=${EDGE_MAX_AGE_S}, stale-while-revalidate=300`,
+    'public, max-age=300, s-maxage=1800, stale-while-revalidate=60',
   )
   return res
 }
