@@ -17,6 +17,7 @@ import { generateArticleUrl } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import { coverSrc } from "@/lib/media-url"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
@@ -155,7 +156,7 @@ export default async function ArticlesPage({ searchParams }: ArticlesPageProps) 
                     <div className="relative overflow-hidden">
                       {article.image && (
                         <UnifiedImage
-                          src={article.image}
+                          src={coverSrc(article.image, article.id, article.lastEditedTime)}
                           alt={article.title}
                           className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                         />

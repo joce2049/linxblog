@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, Eye, Heart, MessageCircle } from "lucide-react"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import { coverSrc } from "@/lib/media-url"
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import StructuredData from "@/components/StructuredData"
 import { generateArticleUrl } from "@/lib/utils"
@@ -161,7 +162,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {/* 高斯模糊背景层 */}
             <div className="absolute inset-0">
               <UnifiedImage
-                src={article.image}
+                src={coverSrc(article.image, article.id, article.lastEditedTime)}
                 alt=""
                 className="w-full h-full object-cover"
                 style={{ filter: 'blur(10px)' }}
@@ -359,7 +360,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                       {relatedArticle.image && (
                         <div className="relative overflow-hidden aspect-video">
                           <UnifiedImage
-                            src={relatedArticle.image}
+                            src={coverSrc(relatedArticle.image, relatedArticle.id, relatedArticle.lastEditedTime)}
                             alt={relatedArticle.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Calendar } from "lucide-react"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import { coverSrc } from "@/lib/media-url"
 import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import StructuredData from "@/components/StructuredData"
 import { generateResourceUrl } from "@/lib/utils"
@@ -160,7 +161,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
             {/* 高斯模糊背景层 */}
             <div className="absolute inset-0">
               <UnifiedImage
-                src={resource.image}
+                src={coverSrc(resource.image, resource.id, resource.lastEditedTime)}
                 alt=""
                 className="w-full h-full object-cover"
                 style={{ filter: 'blur(10px)' }}
@@ -366,7 +367,7 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
                       {relatedResource.image && (
                         <div className="relative overflow-hidden aspect-video">
                           <UnifiedImage
-                            src={relatedResource.image}
+                            src={coverSrc(relatedResource.image, relatedResource.id, relatedResource.lastEditedTime)}
                             alt={relatedResource.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />

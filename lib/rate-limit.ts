@@ -116,8 +116,4 @@ export const rateLimitConfigs = {
         interval: 60000, // 1 分钟
         maxRequests: 100, // 100 次请求（批量查询）
     },
-    imageUrl: {
-        interval: 60000, // 1 分钟
-        maxRequests: 120, // 120 次请求（图片 URL 过期时按需换新，一屏可能有几十张图并发自愈）
-    },
 } as const

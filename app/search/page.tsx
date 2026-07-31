@@ -12,6 +12,7 @@ import ConfigurableNavigation from "@/components/ConfigurableNavigation"
 import { generateArticleUrl } from "@/lib/utils"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import { coverSrc } from "@/lib/media-url"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
@@ -446,9 +447,8 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                       <div className="relative overflow-hidden">
                         {article.image && (
                           <UnifiedImage
-                            src={article.image}
+                            src={coverSrc(article.image, article.id, article.lastEditedTime)}
                             alt={article.title}
-                            pageId={article.id}
                             className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         )}

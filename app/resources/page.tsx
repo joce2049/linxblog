@@ -12,6 +12,7 @@ import { generateResourceUrl } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import { coverSrc } from "@/lib/media-url"
 import nextDynamic from 'next/dynamic'
 
 const ArticleStatsDisplay = nextDynamic(() => import('@/components/ArticleStatsDisplay'), { ssr: false })
@@ -157,9 +158,8 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
                     <div className="relative overflow-hidden">
                       {resource.image && (
                         <UnifiedImage
-                          src={resource.image}
+                          src={coverSrc(resource.image, resource.id, resource.lastEditedTime)}
                           alt={resource.title}
-                          pageId={resource.id}
                           className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       )}

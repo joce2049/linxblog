@@ -11,6 +11,7 @@ import { generateArticleUrl } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import Link from "next/link"
 import UnifiedImage from "@/components/UnifiedImage"
+import { coverSrc } from "@/lib/media-url"
 import nextDynamic from 'next/dynamic'
 
 // 动态导入非关键组件，减少首屏加载时间
@@ -114,9 +115,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   <div className="relative overflow-hidden">
                     {article.image && (
                       <UnifiedImage
-                        src={article.image}
+                        src={coverSrc(article.image, article.id, article.lastEditedTime)}
                         alt={article.title}
-                        pageId={article.id}
                         className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     )}
