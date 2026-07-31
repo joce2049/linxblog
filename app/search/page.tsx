@@ -448,6 +448,7 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
                           <UnifiedImage
                             src={article.image}
                             alt={article.title}
+                            pageId={article.id}
                             className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         )}

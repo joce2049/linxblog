@@ -116,6 +116,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                       <UnifiedImage
                         src={article.image}
                         alt={article.title}
+                        pageId={article.id}
                         className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     )}

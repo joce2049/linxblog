@@ -159,6 +159,7 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
                         <UnifiedImage
                           src={resource.image}
                           alt={resource.title}
+                          pageId={resource.id}
                           className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       )}
