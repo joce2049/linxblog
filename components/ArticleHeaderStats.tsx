@@ -6,6 +6,7 @@ import {
     ARTICLE_STATS_UPDATED_EVENT,
     type ArticleStatsUpdateDetail
 } from '@/lib/article-stats-events'
+import { requestArticleStats } from '@/lib/article-stats-batch'
 
 interface ArticleHeaderStatsProps {
     articleId: string
@@ -27,15 +28,7 @@ export default function ArticleHeaderStats({
             const requestStartedAt = Date.now()
 
             try {
-                const response = await fetch(`/api/analytics/stats?articleIds=${articleId}`, {
-                    cache: 'no-store'
-                })
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch stats: ${response.status}`)
-                }
-
-                const data = await response.json()
-                const stat = data.stats[articleId]
+                const stat = await requestArticleStats(articleId)
                 if (stat && lastLiveUpdateRef.current <= requestStartedAt) {
                     setStats({ views: stat.views, likes: stat.likes })
                 }

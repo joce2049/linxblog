@@ -6,6 +6,7 @@ import {
     ARTICLE_STATS_UPDATED_EVENT,
     type ArticleStatsUpdateDetail
 } from '@/lib/article-stats-events'
+import { requestArticleStats } from '@/lib/article-stats-batch'
 
 interface StatsDisplayProps {
     articleId: string
@@ -25,20 +26,12 @@ export default function ArticleStatsDisplay({
     const lastLiveUpdateRef = useRef(0)
 
     useEffect(() => {
-        // 获取最新统计数据
+        // 获取最新统计数据（经批量合并器，避免每张卡片单发请求）
         const fetchStats = async () => {
             const requestStartedAt = Date.now()
 
             try {
-                const response = await fetch(`/api/analytics/stats?articleIds=${articleId}`, {
-                    cache: 'no-store'
-                })
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch stats: ${response.status}`)
-                }
-
-                const data = await response.json()
-                const stat = data.stats[articleId]
+                const stat = await requestArticleStats(articleId)
                 if (stat && lastLiveUpdateRef.current <= requestStartedAt) {
                     setStats({ views: stat.views, likes: stat.likes })
                 }
